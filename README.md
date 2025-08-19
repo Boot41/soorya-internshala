@@ -1,1 +1,0 @@
-# Internshala Clone - Soorya U
