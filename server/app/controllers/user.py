@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.db.models import User
 from app.schemas.user import UserCreate
-from app.lib.security import get_password_hash
+from app.lib.security import get_password_hash, verify_password
 from app.constants.user_types import UserType
 from fastapi import HTTPException, status
 
@@ -15,6 +15,8 @@ def create_user(db: Session, user: UserCreate) -> User:
     db_user = User(
         email=user.email,
         password_hash=hashed_password,
+        first_name=user.first_name,
+        last_name=user.last_name,
         user_type=user.user_type
     )
     db.add(db_user)
@@ -25,3 +27,12 @@ def create_user(db: Session, user: UserCreate) -> User:
 
 def get_user_by_email(db: Session, email: str) -> User | None:
     return db.query(User).filter(User.email == email).first()
+
+
+def authenticate_user(db: Session, email: str, password: str) -> User | None:
+    user = get_user_by_email(db, email)
+    if not user:
+        return None
+    if not verify_password(password, user.password_hash):
+        return None
+    return user

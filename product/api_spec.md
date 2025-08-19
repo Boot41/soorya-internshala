@@ -9,7 +9,7 @@ This document outlines the RESTful API endpoints for the Internshala Clone platf
 - **HTTP Method:** `POST`
 - **HTTP Endpoint:** `/auth/register`
 - **Description:** Registers a new user (applicant or recruiter) with their email and password.
-- **Required Params:** None
+- **Required Params:** `first_name`, `last_name`
 - **Optional Params:** None
 - **Body:**
 
@@ -17,7 +17,9 @@ This document outlines the RESTful API endpoints for the Internshala Clone platf
     {
         "email": "user@example.com",
         "password": "securepassword123",
-        "user_type": "applicant" // or "recruiter"
+        "user_type": "applicant", // or "recruiter"
+        "first_name": "John",
+        "last_name": "Doe"
     }
     ```
 
@@ -63,6 +65,36 @@ This document outlines the RESTful API endpoints for the Internshala Clone platf
 - **Response Status Code:** `200 OK`
 - **Expected Errors:**
   - `401 Unauthorized`: `{"detail": "Invalid credentials"}`
+
+### 1.3 Refresh Access Token
+
+- **HTTP Method:** `POST`
+- **HTTP Endpoint:** `/auth/refresh`
+- **Description:** Refreshes an expired access token using a valid refresh token.
+- **Required Params:** None
+- **Optional Params:** None
+- **Body:**
+
+    ```json
+    {
+        "refresh_token": "your-refresh-token-string"
+    }
+    ```
+
+- **Response Body:**
+
+    ```json
+    {
+        "access_token": "new-jwt-token-string",
+        "token_type": "bearer"
+    }
+    ```
+
+- **Response Status Code:** `200 OK`
+- **Expected Errors:**
+  - `401 Unauthorized`: `{"detail": "Invalid or expired refresh token"}`
+
+
 
 ### 1.3 Get Current User Profile
 
@@ -119,8 +151,6 @@ This document outlines the RESTful API endpoints for the Internshala Clone platf
 
     ```json
     {
-        "first_name": "John",
-        "last_name": "Doe",
         "headline": "Senior Software Engineer",
         "bio": "Updated biography...",
         "resume_url": "http://example.com/new_resume.pdf",
@@ -138,8 +168,7 @@ This document outlines the RESTful API endpoints for the Internshala Clone platf
 
     ```json
     {
-        "first_name": "Jane",
-        "last_name": "Smith"
+        "company_id": "uuid-of-company"
     }
     ```
 

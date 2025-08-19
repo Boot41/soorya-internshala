@@ -1,8 +1,8 @@
-"""Apply pending migrations
+"""Create User Table
 
-Revision ID: 072f32c9afef
-Revises: 48dd05a4c02f
-Create Date: 2025-08-19 19:36:15.877051
+Revision ID: 711e35766a32
+Revises: 
+Create Date: 2025-08-19 22:57:05.011752
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '072f32c9afef'
-down_revision: Union[str, Sequence[str], None] = '48dd05a4c02f'
+revision: str = '711e35766a32'
+down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -25,6 +25,8 @@ def upgrade() -> None:
     sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('password_hash', sa.String(), nullable=False),
+    sa.Column('first_name', sa.String(), nullable=False),
+    sa.Column('last_name', sa.String(), nullable=False),
     sa.Column('user_type', sa.Enum('applicant', 'recruiter', name='user_type_enum'), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
