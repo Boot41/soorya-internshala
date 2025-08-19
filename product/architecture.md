@@ -11,7 +11,6 @@
 7. SQLAlchemy - Database with ORM
 8. Pydantic - Typesafe Models
 
-
 ## Database Schema
 
 Based on the product features and UI requirements, here's the proposed database schema:
@@ -43,7 +42,8 @@ Stores specific profile information for applicants.
 | `resume_url`          | VARCHAR   | NULLABLE                    | URL to the applicant's resume                 |
 | `experience`          | JSONB     | NULLABLE                    | Structured array of work experiences          |
 | `education`           | JSONB     | NULLABLE                    | Structured array of educational background    |
-| `profile_picture_url` | VARCHAR   | NULLABLE                    | URL to the applicant's profile 
+| `profile_picture_url` | VARCHAR   | NULLABLE                    | URL to the applicant's profile
+
         |
 | `updated_at`          | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Last update timestamp                     |
 
