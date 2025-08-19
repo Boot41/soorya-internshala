@@ -1,12 +1,18 @@
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, String, DateTime, Enum
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql import func
+import uuid
 
 from app.db.session import Base
 
 
-class Item(Base):
-    __tablename__ = "items"
+class User(Base):
+    __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
+    user_id = Column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid.uuid4)
+    email = Column(String, unique=True, nullable=False, index=True)
+    password_hash = Column(String, nullable=False)
+    user_type = Column(Enum('applicant', 'recruiter', name='user_type_enum'), nullable=False)
+    created_at = Column(DateTime, nullable=False, default=func.now())
+    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
