@@ -21,7 +21,7 @@ export function SignUpForm({
   const { register, handleSubmit, isSubmitting, errors, setUserType } = useSignUp()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Create your account</CardTitle>
           <CardDescription>Sign up with your details</CardDescription>
