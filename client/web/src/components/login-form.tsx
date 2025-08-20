@@ -10,11 +10,14 @@ import {
 import { Input } from "@/ui/input"
 import { Label } from "@/ui/label"
 import { Link } from "@tanstack/react-router"
+import { useLogin } from "@/hooks/use-login"
+import { Loader2 } from "lucide-react"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { register, handleSubmit, isSubmitting, errors } = useLogin()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -25,7 +28,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="grid gap-6">
               <div className="grid gap-6">
                 <div className="grid gap-3">
@@ -34,17 +37,33 @@ export function LoginForm({
                     id="email"
                     type="email"
                     placeholder="m@example.com"
-                    required
+                    disabled={isSubmitting}
+                    {...register("email")}
                   />
+                  {errors?.email && (
+                    <span className="text-xs text-red-500">{errors.email.message as string}</span>
+                  )}
                 </div>
                 <div className="grid gap-3">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input
+                    id="password"
+                    type="password"
+                    disabled={isSubmitting}
+                    {...register("password")}
+                  />
+                  {errors?.password && (
+                    <span className="text-xs text-red-500">{errors.password.message as string}</span>
+                  )}
                 </div>
-                <Button type="submit" className="w-full">
-                  Login
+                <Button
+                  type="submit"
+                  className={cn("w-full", isSubmitting && "opacity-70")}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? <Loader2 className="mr-2 size-4 animate-spin" />: "Login"}
                 </Button>
               </div>
               <div className="text-center text-sm">
