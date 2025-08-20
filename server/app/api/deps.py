@@ -28,7 +28,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 
 def require_recruiter(user=Depends(get_current_user)):
-    # user.user_type is stored as a plain string in the DB Enum
     if str(user.user_type) != UserType.RECRUITER.value:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only recruiters are allowed for this action")
     return user

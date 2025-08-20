@@ -41,8 +41,6 @@ class UserRegisterResponse(BaseModel):
     message: str
     user_id: UUID
 
-
-# ===== Schemas for /users/me =====
 from typing import Optional, List
 from pydantic import HttpUrl
 
@@ -81,12 +79,10 @@ class UserProfileRecruiterResponse(BaseModel):
 
 
 class UpdateUserProfile(BaseModel):
-    # Applicant fields (all optional)
     headline: Optional[str] = None
     bio: Optional[str] = None
     resume_url: Optional[HttpUrl] = None
     experience: Optional[List[ExperienceItem]] = None
     education: Optional[List[EducationItem]] = None
     profile_picture_url: Optional[HttpUrl] = None
-    # Recruiter field
     company_id: Optional[UUID] = None
