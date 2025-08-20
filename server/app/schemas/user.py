@@ -40,3 +40,53 @@ class User(UserInDBBase):
 class UserRegisterResponse(BaseModel):
     message: str
     user_id: UUID
+
+
+# ===== Schemas for /users/me =====
+from typing import Optional, List
+from pydantic import HttpUrl
+
+
+class ExperienceItem(BaseModel):
+    title: Optional[str] = None
+    company: Optional[str] = None
+
+
+class EducationItem(BaseModel):
+    degree: Optional[str] = None
+    university: Optional[str] = None
+
+
+class UserProfileApplicantResponse(BaseModel):
+    user_id: UUID
+    email: EmailStr
+    user_type: UserType
+    first_name: str
+    last_name: str
+    headline: Optional[str] = None
+    bio: Optional[str] = None
+    resume_url: Optional[HttpUrl] = None
+    experience: List[ExperienceItem] = []
+    education: List[EducationItem] = []
+    profile_picture_url: Optional[HttpUrl] = None
+
+
+class UserProfileRecruiterResponse(BaseModel):
+    user_id: UUID
+    email: EmailStr
+    user_type: UserType
+    first_name: str
+    last_name: str
+    company_id: Optional[UUID] = None
+
+
+class UpdateUserProfile(BaseModel):
+    # Applicant fields (all optional)
+    headline: Optional[str] = None
+    bio: Optional[str] = None
+    resume_url: Optional[HttpUrl] = None
+    experience: Optional[List[ExperienceItem]] = None
+    education: Optional[List[EducationItem]] = None
+    profile_picture_url: Optional[HttpUrl] = None
+    # Recruiter field
+    company_id: Optional[UUID] = None
