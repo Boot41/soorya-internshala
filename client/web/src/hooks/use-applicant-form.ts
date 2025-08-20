@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getApplicantMe, updateApplicantProfile } from '@/api/applicant'
-import api from '@/api/client'
 import { getErrorMessage } from '@/utils/error'
 import { toast } from 'sonner'
+import { uploadProfilePicture } from '@/api/files'
 
 export type ExperienceItem = {
   title?: string
@@ -29,7 +29,17 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
   const [experiences, setExperiences] = useState<ExperienceItem[]>(initial?.experiences ?? [])
   const [educations, setEducations] = useState<EducationItem[]>(initial?.educations ?? [])
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(initial?.avatarUrl)
-  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
+  // Avatar upload mutation
+  const uploadAvatarMutation = useMutation({
+    mutationFn: (file: File) => uploadProfilePicture(file),
+    onSuccess: (url: string) => {
+      setAvatarUrl(url)
+      updateMutation.mutate({ profile_picture_url: url })
+    },
+    onError: (err) =>
+      toast.error(getErrorMessage(err))
+    ,
+  })
 
   // Fetch applicant profile
   const { data: profile, isLoading, isError, refetch } = useQuery({
@@ -96,32 +106,17 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     setEducations((prev) => prev.filter((_, i) => i !== index))
   }
 
-  // Upload avatar to server and store URL
+  // Upload avatar using mutation
   const uploadAvatar = async (file: File): Promise<string> => {
-    const form = new FormData()
-    form.append('file', file)
-    setIsUploadingAvatar(true)
-    try {
-      const res = await api.post<{ url?: string }>('/v1/files/upload/profile', form)
-      const url = res.data?.url
-      if (!url) throw new Error('No URL returned from server')
-      setAvatarUrl(url)
-      // Persist to profile
-      updateMutation.mutate({ profile_picture_url: url })
-      return url
-    } catch (err) {
-      toast.error(getErrorMessage(err))
-      throw err
-    } finally {
-      setIsUploadingAvatar(false)
-    }
+    const url = await uploadAvatarMutation.mutateAsync(file)
+    return url
   }
 
   return {
     experiences,
     educations,
     avatarUrl,
-    isUploadingAvatar,
+    isUploadingAvatar: uploadAvatarMutation.isPending,
     isLoadingProfile: isLoading,
     isProfileError: isError,
     refetchProfile: refetch,
