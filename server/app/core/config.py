@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Internshala Clone"
     API_V1_STR: str = "/api/v1"
     DATABASE_URL: str
+    FRONTEND_URLS: str
 
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
