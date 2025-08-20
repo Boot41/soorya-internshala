@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getApplicantMe, updateApplicantProfile } from '@/api/applicant'
 import { getErrorMessage } from '@/utils/error'
 import { toast } from 'sonner'
-import { uploadProfilePicture } from '@/api/files'
+import { uploadProfilePicture, uploadResume as uploadResumeApi } from '@/api/files'
 
 export type ExperienceItem = {
   title?: string
@@ -41,6 +41,15 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
       toast.error(getErrorMessage(err)),
   })
 
+  const uploadResumeMutation = useMutation({
+    mutationKey: ["applicant", "resume"],
+    mutationFn: (file: File) => uploadResumeApi(file),
+    onSuccess: (url: string) => {
+      updateMutation.mutate({ resume_url: url })
+    },
+    onError: (err) => toast.error(getErrorMessage(err)),
+  })
+
   const { data: profile, isLoading, isError, refetch } = useQuery({
     queryKey: ['applicant', 'me'],
     queryFn: getApplicantMe,
@@ -61,17 +70,25 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
 
   const updateMutation = useMutation({
     mutationFn: updateApplicantProfile,
-    onSuccess: (data) => {
-      queryClient.setQueryData(['applicant', 'me'], data)
-      setExperiences((data.experience ?? []).map((it) => ({
-        title: it?.title ?? undefined,
-        company: it?.company ?? undefined,
-      })))
-      setEducations((data.education ?? []).map((it) => ({
-        degree: it?.degree ?? undefined,
-        university: it?.university ?? undefined,
-      })))
-      setAvatarUrl(data.profile_picture_url ?? undefined)
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['applicant', 'me'] })
+
+      // Optimistically update local editable state from variables if provided
+      if (variables?.experience) {
+        setExperiences((variables.experience ?? []).map((it) => ({
+          title: it?.title ?? undefined,
+          company: it?.company ?? undefined,
+        })))
+      }
+      if (variables?.education) {
+        setEducations((variables.education ?? []).map((it) => ({
+          degree: it?.degree ?? undefined,
+          university: it?.university ?? undefined,
+        })))
+      }
+      if (variables?.profile_picture_url !== undefined) {
+        setAvatarUrl(variables.profile_picture_url ?? undefined)
+      }
     },
     onError: (err) => {
       toast.error(getErrorMessage(err))
@@ -107,12 +124,18 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     return url
   }
 
+  const uploadResume = async (file: File): Promise<string> => {
+    const url = await uploadResumeMutation.mutateAsync(file)
+    return url
+  }
+
   return {
     experiences,
     profile,
     educations,
     avatarUrl,
     isUploadingAvatar: uploadAvatarMutation.isPending,
+    isUploadingResume: uploadResumeMutation.isPending,
     isLoadingProfile: isLoading,
     isProfileError: isError,
     refetchProfile: refetch,
@@ -124,6 +147,7 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     removeEducation,
     setAvatarUrl,
     uploadAvatar,
+    uploadResume,
     saveProfile: (payload: Partial<ApplicantFormState> = {}) =>
       updateMutation.mutate({
         experience: payload.experiences ?? experiences,

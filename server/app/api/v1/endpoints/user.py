@@ -61,9 +61,15 @@ def update_me(
             db.add(applicant)
         # Apply partial updates
         data = update.dict(exclude_unset=True)
+        url_fields = {"resume_url", "profile_picture_url"}
         for field in ["headline", "bio", "resume_url", "experience", "education", "profile_picture_url"]:
             if field in data:
-                setattr(applicant, field, data[field])
+                value = data[field]
+                # Convert Pydantic HttpUrl to plain str for SQLAlchemy String column
+                if field in url_fields and value is not None:
+                    setattr(applicant, field, str(value))
+                else:
+                    setattr(applicant, field, value)
         db.commit()
         return {"message": "Profile updated successfully"}
 

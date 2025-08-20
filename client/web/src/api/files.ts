@@ -17,3 +17,20 @@ export async function uploadProfilePicture(file: File): Promise<string> {
     throw new Error(getErrorMessage(err))
   }
 }
+
+export async function uploadResume(file: File): Promise<string> {
+  try {
+    const form = new FormData()
+    form.append('file', file)
+    const { data } = await api.post<{ url?: string }>(
+      '/files/upload/resume',
+      form
+    )
+    const url = data?.url
+    if (!url) throw new Error('No URL returned from server')
+    return url
+  } catch (err) {
+    console.error('[uploadResume]', err)
+    throw new Error(getErrorMessage(err))
+  }
+}
