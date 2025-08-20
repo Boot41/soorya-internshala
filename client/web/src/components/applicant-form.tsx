@@ -26,7 +26,11 @@ export function ApplicantForm({ className, ...props }: React.ComponentProps<"div
     uploadAvatar,
     uploadResume,
     saveProfile,
-    profile
+    profile,
+    headline,
+    bio,
+    setHeadline,
+    setBio,
   } = useApplicantForm()
 
   return (
@@ -146,7 +150,13 @@ export function ApplicantForm({ className, ...props }: React.ComponentProps<"div
           <form className="grid gap-6">
             <div className="grid gap-3">
               <Label htmlFor="headline">Headline</Label>
-              <Input id="headline" placeholder="Aspiring Frontend Developer" disabled={isLoadingProfile || isSavingProfile} />
+              <Input
+                id="headline"
+                placeholder="Aspiring Frontend Developer"
+                value={headline ?? ""}
+                onChange={(e) => setHeadline(e.target.value)}
+                disabled={isLoadingProfile || isSavingProfile}
+              />
             </div>
 
             <div className="grid gap-3">
@@ -155,7 +165,8 @@ export function ApplicantForm({ className, ...props }: React.ComponentProps<"div
                 id="bio"
                 placeholder="Tell us about yourself"
                 className="min-h-28 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                defaultValue=""
+                value={bio ?? ""}
+                onChange={(e) => setBio(e.target.value)}
                 disabled={isLoadingProfile || isSavingProfile}
               />
             </div>

@@ -29,6 +29,8 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
   const [experiences, setExperiences] = useState<ExperienceItem[]>(initial?.experiences ?? [])
   const [educations, setEducations] = useState<EducationItem[]>(initial?.educations ?? [])
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(initial?.avatarUrl)
+  const [headline, setHeadline] = useState<string | undefined>(undefined)
+  const [bio, setBio] = useState<string | undefined>(undefined)
 
   const uploadAvatarMutation = useMutation({
     mutationKey: ["applicant", "profile-pic"],
@@ -66,11 +68,14 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
       university: it?.university ?? undefined,
     })))
     setAvatarUrl(profile.profile_picture_url ?? undefined)
+    setHeadline(profile.headline ?? undefined)
+    setBio(profile.bio ?? undefined)
   }, [profile])
 
   const updateMutation = useMutation({
     mutationFn: updateApplicantProfile,
     onSuccess: (_data, variables) => {
+      // Server currently returns a message; we don't rely on the response shape here
       queryClient.invalidateQueries({ queryKey: ['applicant', 'me'] })
 
       // Optimistically update local editable state from variables if provided
@@ -88,6 +93,12 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
       }
       if (variables?.profile_picture_url !== undefined) {
         setAvatarUrl(variables.profile_picture_url ?? undefined)
+      }
+      if (variables?.headline !== undefined) {
+        setHeadline(variables.headline ?? undefined)
+      }
+      if (variables?.bio !== undefined) {
+        setBio(variables.bio ?? undefined)
       }
     },
     onError: (err) => {
@@ -134,6 +145,8 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     profile,
     educations,
     avatarUrl,
+    headline,
+    bio,
     isUploadingAvatar: uploadAvatarMutation.isPending,
     isUploadingResume: uploadResumeMutation.isPending,
     isLoadingProfile: isLoading,
@@ -146,6 +159,8 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     updateEducation,
     removeEducation,
     setAvatarUrl,
+    setHeadline,
+    setBio,
     uploadAvatar,
     uploadResume,
     saveProfile: (payload: Partial<ApplicantFormState> = {}) =>
@@ -153,6 +168,8 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
         experience: payload.experiences ?? experiences,
         education: payload.educations ?? educations,
         profile_picture_url: payload.avatarUrl ?? avatarUrl,
+        headline: headline ?? null,
+        bio: bio ?? null,
       }),
     isSavingProfile: updateMutation.isPending,
   }

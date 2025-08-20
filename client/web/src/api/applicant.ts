@@ -1,5 +1,5 @@
 import api from '@/api/client'
-import type { UpdateUserProfile, UserProfileApplicantResponse } from '@/types/applicant'
+import type { UpdateUserProfile, UserProfileApplicantResponse, ExperienceItem, EducationItem, ApplicantBasicsPayload } from '@/types/applicant'
 import { getErrorMessage } from '@/utils/error'
 
 
@@ -19,6 +19,16 @@ export async function updateApplicantProfile(payload: UpdateUserProfile) {
     return res.data
   } catch (err) {
     console.error('[updateApplicantProfile]', err)
+    throw new Error(getErrorMessage(err))
+  }
+}
+
+export async function updateApplicantBasics(payload: ApplicantBasicsPayload) {
+  try {
+    // Server currently returns a message; we don't rely on the response shape here
+    await api.put('/users/me', payload)
+  } catch (err) {
+    console.error('[updateApplicantBasics]', err)
     throw new Error(getErrorMessage(err))
   }
 }

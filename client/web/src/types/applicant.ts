@@ -31,3 +31,10 @@ export type UpdateUserProfile = {
   profile_picture_url?: string | null
   company_id?: string | null
 }
+
+export type ApplicantBasicsPayload = {
+  headline?: string | null
+  bio?: string | null
+  experience?: ExperienceItem[] | null
+  education?: EducationItem[] | null
+}
