@@ -17,6 +17,7 @@ class CompanyCreate(CompanyBase):
 
 
 class CompanyUpdate(BaseModel):
+    name: Optional[str] = None
     description: Optional[str] = None
     website_url: Optional[HttpUrl] = None
     logo_url: Optional[HttpUrl] = None

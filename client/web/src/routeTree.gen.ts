@@ -12,7 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ApplicantRouteImport } from './routes/applicant'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
+import { Route as CompanyIndexRouteImport } from './routes/company/index'
+import { Route as CompanyCompanyIdRouteImport } from './routes/company/$companyId'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 
@@ -31,9 +32,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
+const CompanyIndexRoute = CompanyIndexRouteImport.update({
+  id: '/company/',
+  path: '/company/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanyCompanyIdRoute = CompanyCompanyIdRouteImport.update({
+  id: '/company/$companyId',
+  path: '/company/$companyId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSignUpRoute = AuthSignUpRouteImport.update({
@@ -53,7 +59,8 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/company/$companyId': typeof CompanyCompanyIdRoute
+  '/company': typeof CompanyIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,7 +68,8 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/company/$companyId': typeof CompanyCompanyIdRoute
+  '/company': typeof CompanyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,7 +78,8 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/company/$companyId': typeof CompanyCompanyIdRoute
+  '/company/': typeof CompanyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -80,7 +89,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/auth/login'
     | '/auth/sign-up'
-    | '/demo/tanstack-query'
+    | '/company/$companyId'
+    | '/company'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -88,7 +98,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/auth/login'
     | '/auth/sign-up'
-    | '/demo/tanstack-query'
+    | '/company/$companyId'
+    | '/company'
   id:
     | '__root__'
     | '/'
@@ -96,7 +107,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/auth/login'
     | '/auth/sign-up'
-    | '/demo/tanstack-query'
+    | '/company/$companyId'
+    | '/company/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -105,7 +117,8 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  CompanyCompanyIdRoute: typeof CompanyCompanyIdRoute
+  CompanyIndexRoute: typeof CompanyIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -131,11 +144,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
+    '/company/': {
+      id: '/company/'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof CompanyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/company/$companyId': {
+      id: '/company/$companyId'
+      path: '/company/$companyId'
+      fullPath: '/company/$companyId'
+      preLoaderRoute: typeof CompanyCompanyIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/sign-up': {
@@ -161,7 +181,8 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignUpRoute: AuthSignUpRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  CompanyCompanyIdRoute: CompanyCompanyIdRoute,
+  CompanyIndexRoute: CompanyIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

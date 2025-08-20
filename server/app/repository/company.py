@@ -45,7 +45,16 @@ def create_company(db: Session, *, recruiter_user_id: UUID, company_in: CompanyC
 
 def update_company(db: Session, *, company: Company, update_data: dict) -> Company:
     for field, value in update_data.items():
-        if value is not None and hasattr(company, field):
+        if not hasattr(company, field):
+            continue
+        # Normalize URL types coming from Pydantic (e.g., HttpUrl)
+        if field in {"website_url", "logo_url"}:
+            # Accept empty string as None, otherwise cast to str
+            if value == "":
+                value = None
+            elif value is not None:
+                value = str(value)
+        if value is not None:
             setattr(company, field, value)
     db.add(company)
     db.commit()
