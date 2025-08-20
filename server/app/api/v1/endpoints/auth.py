@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from sqlalchemy.orm import Session
 from app.schemas.user import UserCreate, UserRegisterResponse, Token, UserLogin
-from app.controllers import user as user_controller
+from app.repository import user as user_repository
 from app.db.session import get_db
 from app.lib.jwt import create_access_token, create_refresh_token, decode_token
 from app.core.config import settings
@@ -12,17 +12,17 @@ router = APIRouter()
 
 @router.post("/register", response_model=UserRegisterResponse, status_code=status.HTTP_201_CREATED)
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
-    db_user = user_controller.get_user_by_email(db, email=user.email)
+    db_user = user_repository.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     
-    new_user = user_controller.create_user(db=db, user=user)
+    new_user = user_repository.create_user(db=db, user=user)
     return {"message": "User registered successfully", "user_id": new_user.user_id}
 
 
 @router.post("/login", response_model=Token)
 def login_for_access_token(response: Response, user_login: UserLogin, db: Session = Depends(get_db)):
-    user = user_controller.authenticate_user(db, user_login.email, user_login.password)
+    user = user_repository.authenticate_user(db, user_login.email, user_login.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -57,7 +57,7 @@ def refresh_access_token(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
     
     email = payload["sub"]
-    user = user_controller.get_user_by_email(db, email=email)
+    user = user_repository.get_user_by_email(db, email=email)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
     
