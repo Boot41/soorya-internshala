@@ -37,7 +37,7 @@ export function ApplicantForm({ className, ...props }: React.ComponentProps<"div
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
         <CardHeader className="items-center text-center">
-          <CardTitle className="text-xl">Update Applicant Profile</CardTitle>
+          <CardTitle className="text-xl">Manage your Profile</CardTitle>
           <CardDescription>Keep your profile up to date</CardDescription>
         </CardHeader>
         <CardContent>
