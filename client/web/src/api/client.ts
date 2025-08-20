@@ -33,7 +33,7 @@ async function refreshAccessToken(): Promise<string | null> {
     if (!refreshPromise) {
         // Use a plain axios call without our interceptors to avoid loops
         refreshPromise = axios
-            .get("/auth/refresh", { baseURL: baseURL ?? "/api", withCredentials: true })
+            .post("/auth/refresh", undefined, { baseURL: baseURL ?? "/api", withCredentials: true })
             .then((res) => {
                 const newToken: string | undefined = res.data?.access_token ?? res.data?.accessToken
                 if (newToken) {

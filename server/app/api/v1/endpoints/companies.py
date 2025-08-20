@@ -2,7 +2,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_recruiter
+from app.api.deps import require_recruiter
 from app.db.session import get_db
 from app.controllers import company as company_controller
 from app.schemas.company import CompanyCreate, CompanyUpdate, CompanyResponse
