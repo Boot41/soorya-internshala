@@ -24,6 +24,8 @@ Stores core user authentication information.
 | `user_id`       | UUID      | PRIMARY KEY, UNIQUE         | Unique identifier for the user            |
 | `email`         | VARCHAR   | UNIQUE, NOT NULL            | User's email address, used for login      |
 | `password_hash` | VARCHAR   | NOT NULL                    | Hashed password for security              |
+| `first_name`    | VARCHAR   | NOT NULL                    | User's first name                         |
+| `last_name`     | VARCHAR   | NOT NULL                    | User's last name                          |
 | `user_type`     | ENUM      | ('applicant', 'recruiter'), NOT NULL | Role of the user (applicant or recruiter) |
 | `created_at`    | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Timestamp of user creation          |
 | `updated_at`    | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Last update timestamp             |
@@ -35,16 +37,12 @@ Stores specific profile information for applicants.
 | Column Name           | Data Type | Constraints                 | Description                                   |
 | :-------------------- | :-------- | :-------------------------- | :-------------------------------------------- |
 | `applicant_id`        | UUID      | PRIMARY KEY, FOREIGN KEY (users.user_id) | Unique identifier for the applicant (same as user_id) |
-| `first_name`          | VARCHAR   | NOT NULL                    | Applicant's first name                        |
-| `last_name`           | VARCHAR   | NOT NULL                    | Applicant's last name                         |
 | `headline`            | VARCHAR   | NULLABLE                    | Short professional headline                   |
 | `bio`                 | TEXT      | NULLABLE                    | A brief biography of the applicant            |
 | `resume_url`          | VARCHAR   | NULLABLE                    | URL to the applicant's resume                 |
 | `experience`          | JSONB     | NULLABLE                    | Structured array of work experiences          |
 | `education`           | JSONB     | NULLABLE                    | Structured array of educational background    |
-| `profile_picture_url` | VARCHAR   | NULLABLE                    | URL to the applicant's profile
-
-        |
+| `profile_picture_url` | VARCHAR   | NULLABLE                    | URL to the applicant's profile |
 | `updated_at`          | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Last update timestamp                     |
 
 ### 3. Recruiters Table (`recruiters`)
@@ -54,8 +52,6 @@ Stores specific profile information for recruiters.
 | Column Name   | Data Type | Constraints                 | Description                                   |
 | :------------ | :-------- | :-------------------------- | :-------------------------------------------- |
 | `recruiter_id`| UUID      | PRIMARY KEY, FOREIGN KEY (users.user_id) | Unique identifier for the recruiter (same as user_id) |
-| `first_name`  | VARCHAR   | NOT NULL                    | Recruiter's first name                        |
-| `last_name`   | VARCHAR   | NOT NULL                    | Recruiter's last name                         |
 | `company_id`  | UUID      | FOREIGN KEY (companies.company_id), NOT NULL | Company the recruiter is associated with |
 | `updated_at`  | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Last update timestamp                     |
 
@@ -83,7 +79,7 @@ Stores details about job openings posted by recruiters.
 | :----------------- | :-------- | :-------------------------- | :-------------------------------------------- |
 | `job_id`           | UUID      | PRIMARY KEY, UNIQUE         | Unique identifier for the job posting         |
 | `company_id`       | UUID      | FOREIGN KEY (companies.company_id), NOT NULL | Company that posted the job               |
-| `recruiter_id`     | UUID      | FOREIGN KEY (recruiters.recruiter_id), NOT NULL | Recruiter who posted the job              |
+| `recruiter_id`     | UUID      | FOREIGN KEY (recruitters.recruiter_id), NOT NULL | Recruiter who posted the job              |
 | `title`            | VARCHAR   | NOT NULL                    | Job title                                     |
 | `description`      | TEXT      | NOT NULL                    | Detailed job description                      |
 | `requirements`     | TEXT      | NOT NULL                    | Key requirements for the role                 |

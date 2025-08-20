@@ -1,11 +1,13 @@
 import sys
 import os
 from logging.config import fileConfig
-
+from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+
+load_dotenv()
 
 # add your project's root directory to sys.path
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "app"))

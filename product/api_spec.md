@@ -94,9 +94,7 @@ This document outlines the RESTful API endpoints for the Internshala Clone platf
 - **Expected Errors:**
   - `401 Unauthorized`: `{"detail": "Invalid or expired refresh token"}`
 
-
-
-### 1.3 Get Current User Profile
+### 1.4 Get Current User Profile
 
 - **HTTP Method:** `GET`
 - **HTTP Endpoint:** `/users/me`
@@ -140,7 +138,7 @@ This document outlines the RESTful API endpoints for the Internshala Clone platf
   - `401 Unauthorized`: `{"detail": "Not authenticated"}`
   - `404 Not Found`: `{"detail": "User profile not found"}`
 
-### 1.4 Update Current User Profile
+### 1.5 Update Current User Profile
 
 - **HTTP Method:** `PUT`
 - **HTTP Endpoint:** `/users/me`
