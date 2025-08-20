@@ -60,7 +60,7 @@ export function LoginForm({
                 </div>
                 <Button
                   type="submit"
-                  className={cn("w-full", isSubmitting && "opacity-70")}
+                  className={cn("cursor-pointer w-full", isSubmitting && "opacity-70")}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? <Loader2 className="mr-2 size-4 animate-spin" />: "Login"}
