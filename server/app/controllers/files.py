@@ -3,6 +3,7 @@ from uuid import uuid4
 from typing import Optional
 
 from fastapi import HTTPException, UploadFile, status
+from app.core.config import settings
 from sqlalchemy.orm import Session
 
 from app.constants.paths import (
@@ -88,7 +89,7 @@ async def save_uploaded_file(
     destination.write_bytes(data)
 
     # Return public URL (served by StaticFiles at /static)
-    url = f"{url_prefix}/{filename}"
+    url = f"{settings.BACKEND_URL}{url_prefix}/{filename}"
 
     # Persist URL in the database based on file type
     if file_type in ("resume", "profile"):

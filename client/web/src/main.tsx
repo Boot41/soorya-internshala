@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 import * as TanStackQueryProvider from './integrations/tanstack-query/root-provider.tsx'
+import { StartupAuthRefresh } from './components/startup-auth-refresh'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -38,6 +39,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
+        <StartupAuthRefresh />
         <RouterProvider router={router} />
       </TanStackQueryProvider.Provider>
     </StrictMode>,

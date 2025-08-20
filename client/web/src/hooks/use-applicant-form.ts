@@ -29,25 +29,23 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
   const [experiences, setExperiences] = useState<ExperienceItem[]>(initial?.experiences ?? [])
   const [educations, setEducations] = useState<EducationItem[]>(initial?.educations ?? [])
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(initial?.avatarUrl)
-  // Avatar upload mutation
+
   const uploadAvatarMutation = useMutation({
+    mutationKey: ["applicant", "profile-pic"],
     mutationFn: (file: File) => uploadProfilePicture(file),
     onSuccess: (url: string) => {
       setAvatarUrl(url)
       updateMutation.mutate({ profile_picture_url: url })
     },
     onError: (err) =>
-      toast.error(getErrorMessage(err))
-    ,
+      toast.error(getErrorMessage(err)),
   })
 
-  // Fetch applicant profile
   const { data: profile, isLoading, isError, refetch } = useQuery({
     queryKey: ['applicant', 'me'],
     queryFn: getApplicantMe,
   })
 
-  // Sync local editable state when profile loads/changes
   useEffect(() => {
     if (!profile) return
     setExperiences((profile.experience ?? []).map((it) => ({
@@ -61,11 +59,9 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     setAvatarUrl(profile.profile_picture_url ?? undefined)
   }, [profile])
 
-  // Update profile mutation
   const updateMutation = useMutation({
     mutationFn: updateApplicantProfile,
     onSuccess: (data) => {
-      // Update cache and local state
       queryClient.setQueryData(['applicant', 'me'], data)
       setExperiences((data.experience ?? []).map((it) => ({
         title: it?.title ?? undefined,
@@ -106,7 +102,6 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     setEducations((prev) => prev.filter((_, i) => i !== index))
   }
 
-  // Upload avatar using mutation
   const uploadAvatar = async (file: File): Promise<string> => {
     const url = await uploadAvatarMutation.mutateAsync(file)
     return url
@@ -114,6 +109,7 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
 
   return {
     experiences,
+    profile,
     educations,
     avatarUrl,
     isUploadingAvatar: uploadAvatarMutation.isPending,
