@@ -34,3 +34,9 @@ def require_recruiter(user=Depends(get_current_user)):
     if str(user.user_type) != UserType.RECRUITER.value:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only recruiters are allowed for this action")
     return user
+
+
+def require_applicant(user=Depends(get_current_user)):
+    if str(user.user_type) != UserType.APPLICANT.value:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only applicants are allowed for this action")
+    return user
