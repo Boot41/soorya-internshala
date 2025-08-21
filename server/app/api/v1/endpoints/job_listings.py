@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.api.deps import require_recruiter, require_applicant
+from app.api.deps import get_current_user, require_recruiter, require_applicant
 from app.db.session import get_db
 from app.controllers import job_listing as controller
 from app.controllers import application as application_controller
@@ -12,6 +12,8 @@ from app.schemas.job_listing import (
     JobListingCreate,
     JobListingUpdate,
     JobListingResponse,
+    JobListingsQuery,
+    PagedJobListingsResponse,
 )
 from app.schemas.application import ApplyRequest, ApplyResponse, ApplicationStatusResponse
 
@@ -56,6 +58,16 @@ def list_job_listings(
 ):
     jobs = controller.list_job_listings_controller(db, company_id=company_id, limit=limit)
     return jobs
+
+
+@router.get("/feed", response_model=PagedJobListingsResponse)
+def list_job_listings_feed(
+    db: Session = Depends(get_db),
+    _=Depends(get_current_user),
+    params: JobListingsQuery = Depends(),
+):
+    items, next_cursor = controller.list_job_listings_paged_controller(db, query=params)
+    return {"items": items, "next_cursor": next_cursor}
 
 
 @router.get("/{job_id}", response_model=JobListingResponse)
