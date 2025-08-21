@@ -6,9 +6,11 @@ import { createJobListing } from "@/api/job-listing"
 import { getErrorMessage } from "@/utils/error"
 import { toast } from "sonner"
 import { useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
 import type { JobListingRequestPayload } from "@/types/job-listing"
 
 export function useCreateJob() {
+  const navigate = useNavigate()
   const form = useForm<JobListingPayload>({
     resolver: zodResolver(jobListingSchema),
     defaultValues: {
@@ -30,6 +32,9 @@ export function useCreateJob() {
     mutationFn: (payload: JobListingRequestPayload) => createJobListing(payload),
     onSuccess: (data) => {
       toast.success(data?.message ?? "Job listing created")
+      if (data?.job_id) 
+        navigate({ to: "/job-listing/$jobId", params: {jobId: data.job_id} })
+      
     },
     onError: (err) => {
       toast.error(getErrorMessage(err))
