@@ -1,4 +1,4 @@
-import type {  ApplicationStatus } from "@/api/applications"
+import type {  ApplicationStatus } from "@/types/application"
 import { SectionCards } from "./section-card"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"

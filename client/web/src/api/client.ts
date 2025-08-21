@@ -10,7 +10,7 @@ if (!baseURL)
     )
 
 export const api = axios.create({
-    baseURL: baseURL ?? "/api",
+    baseURL: baseURL ?? "/api/v1",
     withCredentials: true,
 })
 

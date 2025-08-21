@@ -5,25 +5,9 @@ import { getErrorMessage } from '@/utils/error'
 import { toast } from 'sonner'
 import { uploadProfilePicture, uploadResume as uploadResumeApi } from '@/api/files'
 import { useNavigate } from '@tanstack/react-router';
+import type { ApplicantFormState, UseApplicantFormOptions } from '@/types/application-form'
+import type { EducationItem, ExperienceItem } from '@/types/applicant'
 
-export type ExperienceItem = {
-  title?: string
-  company?: string
-}
-
-export type EducationItem = {
-  degree?: string
-  university?: string
-}
-
-export type ApplicantFormState = {
-  experiences: ExperienceItem[]
-  educations: EducationItem[]
-  avatarUrl?: string
-  skills?: string[]
-}
-
-export type UseApplicantFormOptions = Partial<ApplicantFormState>
 
 export function useApplicantForm(initial?: UseApplicantFormOptions) {
   const queryClient = useQueryClient()

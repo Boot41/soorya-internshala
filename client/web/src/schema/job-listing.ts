@@ -21,3 +21,16 @@ export const jobListingSchema = z.object({
 })
 
 export type JobListingPayload = z.infer<typeof jobListingSchema>
+
+export const updateSchema = z.object({
+  title: z.string().min(2).optional(),
+  description: z.string().min(10).optional(),
+  requirements: z.string().min(5).optional(),
+  skills_required: z.array(z.string().trim().min(1)).optional(),
+  location: z.string().min(2).optional(),
+  experience_level: z.string().min(2).optional(),
+  job_type: z.enum(["full-time", "part-time", "internship", "contract"]).optional(),
+  salary_range: z.string().optional(),
+  expires_at: z.date().optional(),
+  status: z.enum(["open", "closed", "draft"]).optional(),
+})

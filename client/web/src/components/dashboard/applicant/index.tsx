@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
-import { listMyApplications, type MyApplicationItem } from "@/api/applications"
+import { listMyApplications, } from "@/api/applications"
+import type { MyApplicationItem } from "@/types/application"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/ui/table"
 import { Badge } from "@/ui/badge"
 import { IconLoader } from "@tabler/icons-react"

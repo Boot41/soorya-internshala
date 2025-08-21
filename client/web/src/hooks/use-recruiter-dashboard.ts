@@ -2,7 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRecruiterCompany } from "./use-recruiter-company"
 import { useState } from "react"
 import { listJobListings } from "@/api/job-listing"
-import { listApplicationsByJob, updateApplicationStatus, type ApplicationStatus, type JobApplicationItem } from "@/api/applications"
+import { listApplicationsByJob, updateApplicationStatus } from "@/api/applications"
+import type { ApplicationStatus, JobApplicationItem } from "@/types/application"
 import { toast } from "sonner"
 
 export const useRecruiterDashboard = ()=> {
@@ -30,7 +31,7 @@ export const useRecruiterDashboard = ()=> {
         toast.success("Application status updated")
         await qc.invalidateQueries({ queryKey: ["applications", selectedJobId ?? null] })
       },
-      onError: (err: any) => toast.error(err?.message ?? "Failed to update status"),
+      onError: (err) => toast.error(err?.message ?? "Failed to update status"),
     })
   
     return {

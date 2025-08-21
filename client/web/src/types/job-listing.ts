@@ -78,3 +78,25 @@ export type JobListingsFeedParams = {
   sort_order?: "asc" | "desc"
   limit?: number
 }
+
+
+export interface CreateJobListingResponse {
+  message: string
+  job_id: string
+}
+
+export interface ApplicationStatusResponse {
+  has_applied: boolean
+  application_id?: string | null
+  status?: string | null
+}
+
+export type UseJobFiltersReturn = {
+  params: JobListingsFeedParams
+  setParams: (next: JobListingsFeedParams) => void
+  value: JobListingsFeedParams
+  onChange: (next: JobListingsFeedParams) => void
+  reset: () => void
+  searchValue: string
+  onSearchChange: (value: string) => void
+}

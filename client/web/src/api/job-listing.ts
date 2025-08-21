@@ -1,17 +1,24 @@
 import api from "@/api/client"
 import { getErrorMessage } from "@/utils/error"
-import type { JobListingRequestPayload, JobListingUpdatePayload, JobListing } from "@/types/job-listing"
+import type { JobListingRequestPayload, JobListingUpdatePayload, JobListing, ApplicationStatusResponse, CreateJobListingResponse, JobListingsFeedParams, JobListingsFeedResponse } from "@/types/job-listing"
 
-export interface CreateJobListingResponse {
-  message: string
-  job_id: string
+
+export async function fetchJobListingsFeed({
+  pageParam,
+  params,
+}: {
+  pageParam?: string | null
+  params: JobListingsFeedParams
+}): Promise<JobListingsFeedResponse> {
+  const { data } = await api.get<JobListingsFeedResponse>("/job-listings/feed", {
+    params: {
+      ...params,
+      cursor: pageParam ?? undefined,
+    },
+  })
+  return data
 }
 
-export interface ApplicationStatusResponse {
-  has_applied: boolean
-  application_id?: string | null
-  status?: string | null
-}
 
 export async function getMyApplicationStatus(jobId: string): Promise<ApplicationStatusResponse> {
   try {

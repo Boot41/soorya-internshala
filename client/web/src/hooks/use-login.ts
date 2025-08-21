@@ -29,11 +29,11 @@ export function useLogin() {
         const me = await getMe()
         // hydrate minimal user state immediately
         userStore.user = {
-          userId: me.user_id ?? null,
-          fullName: `${me.first_name ?? ''} ${me.last_name ?? ''}`.trim() || null,
-          userType: (me as any).user_type ?? null,
+          userId: me?.user_id ?? null,
+          fullName: `${me?.first_name ?? ''} ${me?.last_name ?? ''}`.trim() || null,
+          userType: me?.user_type ?? null,
         }
-        if ((me as any).user_type === "recruiter") {
+        if (me?.user_type === "recruiter") {
           await navigate({ to: "/company" })
         } else {
           await navigate({ to: "/" })

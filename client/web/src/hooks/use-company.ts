@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import { getCompany, type Company } from "@/api/company"
+import { getCompany} from "@/api/company"
+import type { Company } from "@/types/company"
 
 export function useCompany(companyId: string) {
   const query = useQuery<Company, Error>({

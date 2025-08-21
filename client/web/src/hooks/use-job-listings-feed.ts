@@ -1,24 +1,8 @@
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query"
-import api from "@/api/client"
 import type { JobListingsFeedParams, JobListingsFeedResponse } from "@/types/job-listing"
+import { fetchJobListingsFeed } from "@/api/job-listing"
 
 
-
-async function fetchJobListingsFeed({
-  pageParam,
-  params,
-}: {
-  pageParam?: string | null
-  params: JobListingsFeedParams
-}): Promise<JobListingsFeedResponse> {
-  const { data } = await api.get<JobListingsFeedResponse>("/job-listings/feed", {
-    params: {
-      ...params,
-      cursor: pageParam ?? undefined,
-    },
-  })
-  return data
-}
 
 export function useJobListingsFeed(params: JobListingsFeedParams) {
   const query = useInfiniteQuery<

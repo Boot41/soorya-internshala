@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react"
-import type { JobListingsFeedParams } from "@/types/job-listing"
+import type { JobListingsFeedParams, UseJobFiltersReturn } from "@/types/job-listing"
 import { useDebounce } from "@/hooks/use-debounce"
 
-export type UseJobFiltersReturn = {
-  params: JobListingsFeedParams
-  setParams: (next: JobListingsFeedParams) => void
-  value: JobListingsFeedParams
-  onChange: (next: JobListingsFeedParams) => void
-  reset: () => void
-  searchValue: string
-  onSearchChange: (value: string) => void
-}
 
 export function useJobFilters(initial?: Partial<JobListingsFeedParams>): UseJobFiltersReturn {
   const [params, setParams] = useState<JobListingsFeedParams>({
