@@ -12,7 +12,7 @@ import { useCreateJob } from "@/hooks/use-create-jobs"
 import { Badge } from "@/ui/badge"
 
 export function CreateJobListingForm({ className, ...props }: React.ComponentProps<"div">) {
-  const { handleSubmit, register, isSubmitting, errors, setJobType, setStatus, setExpiresAt, skills, addSkill, removeSkill, skillDraft, setSkillDraft, expiresAt } = useCreateJob()
+  const { handleSubmit, register, isSubmitting, errors, setJobType, setStatus, setExpiresAt, skills, addSkill, removeSkill, skillDraft, setSkillDraft, expiresAt, setExperienceLevel, experienceLevel } = useCreateJob()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
@@ -77,7 +77,18 @@ export function CreateJobListingForm({ className, ...props }: React.ComponentPro
 
               <div className="grid gap-3">
                 <Label htmlFor="experience_level">Experience Level</Label>
-                <Input id="experience_level" placeholder="e.g. Entry-level / Mid / Senior" {...register("experience_level")} />
+                <Select value={experienceLevel ?? undefined} onValueChange={(val) => setExperienceLevel(val)}>
+                  <SelectTrigger className="w-full" id="experience_level">
+                    <SelectValue placeholder="Select experience level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Intern">Intern</SelectItem>
+                    <SelectItem value="Junior">Junior</SelectItem>
+                    <SelectItem value="Mid">Mid</SelectItem>
+                    <SelectItem value="Senior">Senior</SelectItem>
+                    <SelectItem value="Lead">Lead</SelectItem>
+                  </SelectContent>
+                </Select>
                 {errors.experience_level && (
                   <p className="text-sm text-red-500">{errors.experience_level.message as string}</p>
                 )}

@@ -87,7 +87,12 @@ export function useCreateJob() {
     setValue("job_type", jobType, { shouldDirty: true, shouldValidate: true })
   }
 
+  const setExperienceLevel = (exp: JobListingPayload["experience_level"]) => {
+    setValue("experience_level", exp, { shouldDirty: true, shouldValidate: true })
+  }
+
   const expiresAt = watch("expires_at")
+  const experienceLevel = watch("experience_level")
 
   return {
     handleSubmit,
@@ -97,6 +102,7 @@ export function useCreateJob() {
     setExpiresAt,
     setStatus,
     setJobType,
+    setExperienceLevel,
     // skills controls
     skills,
     addSkill,
@@ -104,6 +110,7 @@ export function useCreateJob() {
     skillDraft,
     setSkillDraft,
     expiresAt,
+    experienceLevel,
   }
 }
 

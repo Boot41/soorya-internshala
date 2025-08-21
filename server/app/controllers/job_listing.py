@@ -46,7 +46,8 @@ def update_job_listing_controller(
     job_id: UUID,
     update_data: dict,
 ) -> models.JobPosting:
-    job = repo.get_job_listing(db, job_id)
+    # Must get the ORM model, not the response dict
+    job = repo.get_job_listing_model(db, job_id)
     if not job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job listing not found")
 

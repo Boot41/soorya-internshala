@@ -8,6 +8,7 @@ import { Button } from "@/ui/button"
 import { IconLoader } from "@tabler/icons-react"
 import { Link } from "@tanstack/react-router"
 import { useRecruiterDashboard } from "@/hooks/use-recruiter-dashboard"
+import { Pencil } from "lucide-react"
 
 
 
@@ -40,6 +41,17 @@ export default function RecruiterDashboard() {
             </Select>
             {jobsQ.isLoading && <IconLoader className="animate-spin" />}
             {jobsQ.isError && <Badge variant="destructive">Failed to load jobs</Badge>}
+            {selectedJobId && (
+              <Link
+                to="/job-listing/$jobId/update"
+                params={{ jobId: selectedJobId }}
+                aria-label="Edit job"
+                title="Edit job"
+                className="inline-flex items-center justify-center rounded-md border border-white/15 bg-white/5 p-2 text-white/90 shadow-sm hover:bg-white/10"
+              >
+                <Pencil className="h-4 w-4 text-primary" />
+              </Link>
+            )}
           </div>
 
           <div className="overflow-hidden rounded-lg border bg-black/20 backdrop-blur-sm">

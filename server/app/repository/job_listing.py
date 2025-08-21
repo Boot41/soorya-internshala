@@ -44,6 +44,11 @@ def get_job_listing(db: Session, job_id: UUID) -> dict | None:
     return _to_response_dict(job, company_name=company_name)
 
 
+def get_job_listing_model(db: Session, job_id: UUID) -> JobPosting | None:
+    """Return the raw JobPosting model. Useful when controller needs attributes or to update the row."""
+    return db.query(JobPosting).filter(JobPosting.job_id == job_id).first()
+
+
 def list_job_listings(
     db: Session,
     *,

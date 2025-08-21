@@ -23,9 +23,9 @@ export default function Hero({ onScrollToCredibility }: HeroProps) {
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <button
             className="cursor-pointer w-full rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm hover:opacity-90 sm:w-auto"
-            onClick={() => { !accessToken ? navigate({ to: '/auth/login' }) : navigate({ to: '/dashboard' }) }}
+            onClick={() => { !accessToken ? navigate({ to: '/auth/login' }) : navigate({ to: '/job-listing' }) }}
           >
-            Get Personalized Internships
+            View All Internships
           </button>
           <button
             className="cursor-pointer w-full rounded-md border border-border px-5 py-3 text-sm font-medium text-foreground hover:bg-accent sm:w-auto"
