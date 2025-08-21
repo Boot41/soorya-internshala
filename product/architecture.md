@@ -42,6 +42,7 @@ Stores specific profile information for applicants.
 | `resume_url`          | VARCHAR   | NULLABLE                    | URL to the applicant's resume                 |
 | `experience`          | JSONB     | NULLABLE                    | Structured array of work experiences          |
 | `education`           | JSONB     | NULLABLE                    | Structured array of educational background    |
+| `skills`             | JSONB     | NULLABLE                    | Array/object of skills and proficiencies      |
 | `profile_picture_url` | VARCHAR   | NULLABLE                    | URL to the applicant's profile |
 | `updated_at`          | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Last update timestamp                     |
 
@@ -107,21 +108,3 @@ Records job applications made by applicants.
 | `cover_letter`              | TEXT      | NULLABLE                    | Optional cover letter submitted with application |
 | `resume_url_at_application` | VARCHAR   | NULLABLE                    | Snapshot URL of the resume at the time of application |
 | `updated_at`                | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Last update timestamp                     |
-
-### 7. Skills Table (`skills`)
-
-Stores a list of available skills.
-
-| Column Name  | Data Type | Constraints         | Description               |
-| :----------- | :-------- | :------------------ | :------------------------ |
-| `skill_id`   | UUID      | PRIMARY KEY, UNIQUE | Unique identifier for the skill |
-| `skill_name` | VARCHAR   | UNIQUE, NOT NULL    | Name of the skill         |
-
-### 8. ApplicantSkills Table (`applicant_skills`)
-
-Junction table to link applicants with their skills.
-
-| Column Name    | Data Type | Constraints                               | Description                               |
-| :------------- | :-------- | :---------------------------------------- | :---------------------------------------- |
-| `applicant_id` | UUID      | PRIMARY KEY, FOREIGN KEY (applicants.applicant_id) | Unique identifier for the applicant       |
-| `skill_id`     | UUID      | PRIMARY KEY, FOREIGN KEY (skills.skill_id) | Unique identifier for the skill           |
