@@ -1,5 +1,6 @@
 import { CreateJobListingForm } from '@/components/create-job-listing'
-import PageLayout from '@/layouts/page-layout'
+import GlassLayout from '@/layouts/glass-layout'
+import GradientLayout from '@/layouts/gradient-layout'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/job-listing/create')({
@@ -8,8 +9,10 @@ export const Route = createFileRoute('/job-listing/create')({
 
 function RouteComponent() {
   return (
-    <PageLayout>
-      <CreateJobListingForm />
-    </PageLayout>
+    <GradientLayout>
+      <GlassLayout>
+        <CreateJobListingForm />
+      </GlassLayout>
+    </GradientLayout>
   )
 }

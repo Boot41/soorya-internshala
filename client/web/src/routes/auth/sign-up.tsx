@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { SignUpForm } from "@/components/sign-up-form"
 import { AuthLayout } from "@/layouts/auth-layout"
-import PageLayout from '@/layouts/page-layout'
+import GlassLayout from '@/layouts/glass-layout'
+import GradientLayout from '@/layouts/gradient-layout'
 
 export const Route = createFileRoute('/auth/sign-up')({
   component: SignUpPage,
@@ -10,9 +11,11 @@ export const Route = createFileRoute('/auth/sign-up')({
 export default function SignUpPage() {
   return (
     <AuthLayout>
-      <PageLayout>
-        <SignUpForm />
-      </PageLayout>
+      <GradientLayout>
+        <GlassLayout className="max-w-sm">
+          <SignUpForm />
+        </GlassLayout>
+      </GradientLayout>
     </AuthLayout>
   )
 }

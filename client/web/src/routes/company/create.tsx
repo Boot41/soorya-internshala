@@ -1,5 +1,6 @@
 import { CreateCompanyForm } from '@/components/create-company-form'
-import PageLayout from '@/layouts/page-layout'
+import GlassLayout from '@/layouts/glass-layout'
+import GradientLayout from '@/layouts/gradient-layout'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/company/create')({
@@ -8,8 +9,10 @@ export const Route = createFileRoute('/company/create')({
 
 function RouteComponent() {
   return (
-    <PageLayout>
-      <CreateCompanyForm />
-    </PageLayout>
+    <GradientLayout>
+      <GlassLayout>
+        <CreateCompanyForm />
+      </GlassLayout>
+    </GradientLayout>
   )
 }

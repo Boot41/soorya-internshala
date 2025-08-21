@@ -1,5 +1,6 @@
 import { ApplicantForm } from '@/components/applicant-form'
-import PageLayout from '@/layouts/page-layout'
+import GlassLayout from '@/layouts/glass-layout'
+import GradientLayout from '@/layouts/gradient-layout'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/applicant/edit')({
@@ -8,8 +9,10 @@ export const Route = createFileRoute('/applicant/edit')({
 
 function RouteComponent() {
   return (
-    <PageLayout>
-      <ApplicantForm />
-    </PageLayout>
+    <GradientLayout>
+      <GlassLayout>
+        <ApplicantForm />
+      </GlassLayout>
+    </GradientLayout>
   )
 }

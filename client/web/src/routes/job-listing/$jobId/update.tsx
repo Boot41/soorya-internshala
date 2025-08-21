@@ -1,5 +1,6 @@
 import { UpdateJobListingForm } from '@/components/update-job-listing'
-import PageLayout from '@/layouts/page-layout'
+import GlassLayout from '@/layouts/glass-layout'
+import GradientLayout from '@/layouts/gradient-layout'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/job-listing/$jobId/update')({
@@ -9,8 +10,10 @@ export const Route = createFileRoute('/job-listing/$jobId/update')({
 function RouteComponent() {
   const { jobId } = Route.useParams()
   return (
-    <PageLayout>
-      <UpdateJobListingForm jobId={jobId} />
-    </PageLayout>
+    <GradientLayout>
+      <GlassLayout>
+        <UpdateJobListingForm jobId={jobId} />
+      </GlassLayout>
+    </GradientLayout>
   )
 }
