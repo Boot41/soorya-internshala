@@ -1,10 +1,5 @@
-import * as React from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { listJobListings } from "@/api/job-listing"
-import { listApplicationsByJob, updateApplicationStatus, type JobApplicationItem, type ApplicationStatus } from "@/api/applications"
-import { useRecruiterCompany } from "@/hooks/use-recruiter-company"
+import type {  ApplicationStatus } from "@/api/applications"
 import { SectionCards } from "./section-card"
-import { toast } from "sonner"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/ui/table"
