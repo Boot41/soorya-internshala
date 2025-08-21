@@ -15,7 +15,7 @@ export type AllowedUserType = "applicant" | "recruiter"
  */
 export function useRestriction(
   required: AllowedUserType,
-  redirectTo?: Parameters<ReturnType<typeof useNavigate>>[0]["to"]
+  redirectTo: Parameters<ReturnType<typeof useNavigate>>[0]["to"] = "/"
 ) {
   const navigate = useNavigate()
   const userType = useUserStore((s) => s.userType)
@@ -28,7 +28,7 @@ export function useRestriction(
   useEffect(() => {
     if (canAccess === false) {
       toast.warning("You are not authorized to access this page")
-      navigate({ to: (redirectTo ?? "/") })
+      navigate({ to: redirectTo })
     }
   }, [canAccess, navigate, redirectTo])
 }
