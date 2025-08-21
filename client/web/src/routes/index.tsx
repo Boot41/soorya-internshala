@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import Hero from '@/components/landing/Hero'
-import RecentInternships from '@/components/landing/RecentInternships'
-import Testimonials from '@/components/landing/Testimonials'
+import Hero from '@/components/landing/hero'
+import RecentInternships from '@/components/landing/recent-internships'
+import Testimonials from '@/components/landing/testimonials'
 import { LandingGradientLayout } from '@/layouts/gradient-layout'
 
 export const Route = createFileRoute('/')({
