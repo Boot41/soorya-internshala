@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Tuple, List
 from uuid import UUID
 
 from fastapi import HTTPException, status
@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.db import models
 from app.repository import job_listing as repo
+from app.schemas.job_listing import JobListingsQuery
 from app.repository.company import get_recruiter_by_user_id
 
 
@@ -71,3 +72,25 @@ def list_job_listings_controller(
     limit: Optional[int] = None,
 ):
     return repo.list_job_listings(db, company_id=company_id, limit=limit)
+
+
+def list_job_listings_paged_controller(
+    db: Session,
+    *,
+    query: JobListingsQuery,
+) -> tuple[list[dict], Optional[str]]:
+    limit = max(1, min(100, int(query.limit or 20)))
+    items, next_cursor = repo.list_job_listings_paged(
+        db,
+        company_id=query.company_id,
+        location=query.location,
+        job_type=query.job_type,
+        experience_level=query.experience_level,
+        status=query.status,
+        q=query.q,
+        sort_by=query.sort_by,
+        sort_order=query.sort_order,
+        limit=limit,
+        cursor=query.cursor,
+    )
+    return items, next_cursor

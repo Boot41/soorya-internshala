@@ -42,3 +42,39 @@ export type JobListing = {
   posted_at: string; // ISO
   updated_at: string; // ISO
 }
+
+export type PagedJobListing = {
+  job_id: string
+  company_id: string
+  company_name: string
+  recruiter_id: string
+  title: string
+  description: string
+  requirements: string
+  skills_required?: string | null
+  location: string
+  experience_level?: string | null
+  job_type: "full-time" | "part-time" | "internship" | "contract"
+  salary_range?: string | null
+  expires_at?: string | null
+  status: "open" | "closed" | "draft"
+  posted_at: string
+  updated_at: string
+}
+
+export type JobListingsFeedResponse = {
+  items: PagedJobListing[]
+  next_cursor?: string | null
+}
+
+export type JobListingsFeedParams = {
+  q?: string
+  company_id?: string
+  location?: string
+  job_type?: PagedJobListing["job_type"]
+  experience_level?: string
+  status?: PagedJobListing["status"]
+  sort_by?: "posted_at" | "updated_at"
+  sort_order?: "asc" | "desc"
+  limit?: number
+}

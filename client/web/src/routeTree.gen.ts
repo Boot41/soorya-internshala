@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as JobListingIndexRouteImport } from './routes/job-listing/index'
 import { Route as CompanyIndexRouteImport } from './routes/company/index'
 import { Route as ApplicantIndexRouteImport } from './routes/applicant/index'
 import { Route as JobListingCreateRouteImport } from './routes/job-listing/create'
@@ -32,6 +33,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobListingIndexRoute = JobListingIndexRouteImport.update({
+  id: '/job-listing/',
+  path: '/job-listing/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompanyIndexRoute = CompanyIndexRouteImport.update({
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/job-listing/create': typeof JobListingCreateRoute
   '/applicant': typeof ApplicantIndexRoute
   '/company': typeof CompanyIndexRoute
+  '/job-listing': typeof JobListingIndexRoute
   '/company/$companyId/update': typeof CompanyCompanyIdUpdateRoute
   '/job-listing/$jobId/update': typeof JobListingJobIdUpdateRoute
   '/company/$companyId': typeof CompanyCompanyIdIndexRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/job-listing/create': typeof JobListingCreateRoute
   '/applicant': typeof ApplicantIndexRoute
   '/company': typeof CompanyIndexRoute
+  '/job-listing': typeof JobListingIndexRoute
   '/company/$companyId/update': typeof CompanyCompanyIdUpdateRoute
   '/job-listing/$jobId/update': typeof JobListingJobIdUpdateRoute
   '/company/$companyId': typeof CompanyCompanyIdIndexRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/job-listing/create': typeof JobListingCreateRoute
   '/applicant/': typeof ApplicantIndexRoute
   '/company/': typeof CompanyIndexRoute
+  '/job-listing/': typeof JobListingIndexRoute
   '/company/$companyId/update': typeof CompanyCompanyIdUpdateRoute
   '/job-listing/$jobId/update': typeof JobListingJobIdUpdateRoute
   '/company/$companyId/': typeof CompanyCompanyIdIndexRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/job-listing/create'
     | '/applicant'
     | '/company'
+    | '/job-listing'
     | '/company/$companyId/update'
     | '/job-listing/$jobId/update'
     | '/company/$companyId'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/job-listing/create'
     | '/applicant'
     | '/company'
+    | '/job-listing'
     | '/company/$companyId/update'
     | '/job-listing/$jobId/update'
     | '/company/$companyId'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/job-listing/create'
     | '/applicant/'
     | '/company/'
+    | '/job-listing/'
     | '/company/$companyId/update'
     | '/job-listing/$jobId/update'
     | '/company/$companyId/'
@@ -206,6 +218,7 @@ export interface RootRouteChildren {
   JobListingCreateRoute: typeof JobListingCreateRoute
   ApplicantIndexRoute: typeof ApplicantIndexRoute
   CompanyIndexRoute: typeof CompanyIndexRoute
+  JobListingIndexRoute: typeof JobListingIndexRoute
   CompanyCompanyIdUpdateRoute: typeof CompanyCompanyIdUpdateRoute
   JobListingJobIdUpdateRoute: typeof JobListingJobIdUpdateRoute
   CompanyCompanyIdIndexRoute: typeof CompanyCompanyIdIndexRoute
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/job-listing/': {
+      id: '/job-listing/'
+      path: '/job-listing'
+      fullPath: '/job-listing'
+      preLoaderRoute: typeof JobListingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/company/': {
@@ -326,6 +346,7 @@ const rootRouteChildren: RootRouteChildren = {
   JobListingCreateRoute: JobListingCreateRoute,
   ApplicantIndexRoute: ApplicantIndexRoute,
   CompanyIndexRoute: CompanyIndexRoute,
+  JobListingIndexRoute: JobListingIndexRoute,
   CompanyCompanyIdUpdateRoute: CompanyCompanyIdUpdateRoute,
   JobListingJobIdUpdateRoute: JobListingJobIdUpdateRoute,
   CompanyCompanyIdIndexRoute: CompanyCompanyIdIndexRoute,

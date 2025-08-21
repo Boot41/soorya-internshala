@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Literal
+from typing import Optional, Literal, List
 from uuid import UUID as UUIDType
 
 from pydantic import BaseModel
@@ -49,3 +49,26 @@ class JobListingResponse(JobListingBase):
 
     class Config:
         from_attributes = True
+
+
+class JobListingsQuery(BaseModel):
+    # filters
+    company_id: Optional[UUIDType] = None
+    location: Optional[str] = None
+    job_type: Optional[JobType] = None
+    experience_level: Optional[str] = None
+    status: Optional[JobStatus] = None
+    q: Optional[str] = None  # search in title/description
+
+    # sorting
+    sort_by: Literal["posted_at", "updated_at"] = "posted_at"
+    sort_order: Literal["asc", "desc"] = "desc"
+
+    # pagination
+    limit: int = 20
+    cursor: Optional[str] = None  # encoded as "<timestamp ISO>|<job_uuid>"
+
+
+class PagedJobListingsResponse(BaseModel):
+    items: List[JobListingResponse]
+    next_cursor: Optional[str] = None

@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react"
 import { useNavigate } from "@tanstack/react-router"
 import { useUserStore } from "@/store/user"
 import { toast } from "sonner"
+import { useAuthStore } from "@/store/auth"
 
 export type AllowedUserType = "applicant" | "recruiter"
 
@@ -14,16 +15,21 @@ export type AllowedUserType = "applicant" | "recruiter"
  *   useRequireUserType("recruiter", "/dashboard")
  */
 export function useRestriction(
-  required: AllowedUserType,
+  required?: AllowedUserType,
   redirectTo: Parameters<ReturnType<typeof useNavigate>>[0]["to"] = "/"
 ) {
   const navigate = useNavigate()
   const userType = useUserStore((s) => s.userType)
+  const accessToken = useAuthStore((s) => s.accessToken)
 
   const canAccess = useMemo(() => {
+
+    if(!required)
+      return !!accessToken
+
     if (!userType) return false
     return userType === required
-  }, [userType, required])
+  }, [userType, required, accessToken])
 
   useEffect(() => {
     if (canAccess === false) {
