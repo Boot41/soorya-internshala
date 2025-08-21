@@ -10,24 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ApplicantRouteImport } from './routes/applicant'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CompanyIndexRouteImport } from './routes/company/index'
+import { Route as ApplicantIndexRouteImport } from './routes/applicant/index'
 import { Route as JobListingCreateRouteImport } from './routes/job-listing/create'
-import { Route as CompanyCompanyIdRouteImport } from './routes/company/$companyId'
+import { Route as CompanyCreateRouteImport } from './routes/company/create'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as ApplicantEditRouteImport } from './routes/applicant/edit'
 import { Route as JobListingJobIdIndexRouteImport } from './routes/job-listing/$jobId/index'
+import { Route as CompanyCompanyIdIndexRouteImport } from './routes/company/$companyId/index'
 import { Route as JobListingJobIdUpdateRouteImport } from './routes/job-listing/$jobId/update'
+import { Route as CompanyCompanyIdUpdateRouteImport } from './routes/company/$companyId/update'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApplicantRoute = ApplicantRouteImport.update({
-  id: '/applicant',
-  path: '/applicant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -35,9 +32,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompanyIndexRoute = CompanyIndexRouteImport.update({
-  id: '/company/',
-  path: '/company/',
+const ApplicantIndexRoute = ApplicantIndexRouteImport.update({
+  id: '/applicant/',
+  path: '/applicant/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JobListingCreateRoute = JobListingCreateRouteImport.update({
@@ -45,9 +42,9 @@ const JobListingCreateRoute = JobListingCreateRouteImport.update({
   path: '/job-listing/create',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompanyCompanyIdRoute = CompanyCompanyIdRouteImport.update({
-  id: '/company/$companyId',
-  path: '/company/$companyId',
+const CompanyCreateRoute = CompanyCreateRouteImport.update({
+  id: '/company/create',
+  path: '/company/create',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSignUpRoute = AuthSignUpRouteImport.update({
@@ -60,9 +57,19 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApplicantEditRoute = ApplicantEditRouteImport.update({
+  id: '/applicant/edit',
+  path: '/applicant/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JobListingJobIdIndexRoute = JobListingJobIdIndexRouteImport.update({
   id: '/job-listing/$jobId/',
   path: '/job-listing/$jobId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanyCompanyIdIndexRoute = CompanyCompanyIdIndexRouteImport.update({
+  id: '/company/$companyId/',
+  path: '/company/$companyId/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JobListingJobIdUpdateRoute = JobListingJobIdUpdateRouteImport.update({
@@ -70,93 +77,112 @@ const JobListingJobIdUpdateRoute = JobListingJobIdUpdateRouteImport.update({
   path: '/job-listing/$jobId/update',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompanyCompanyIdUpdateRoute = CompanyCompanyIdUpdateRouteImport.update({
+  id: '/company/$companyId/update',
+  path: '/company/$companyId/update',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/applicant': typeof ApplicantRoute
   '/dashboard': typeof DashboardRoute
+  '/applicant/edit': typeof ApplicantEditRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/company/$companyId': typeof CompanyCompanyIdRoute
+  '/company/create': typeof CompanyCreateRoute
   '/job-listing/create': typeof JobListingCreateRoute
-  '/company': typeof CompanyIndexRoute
+  '/applicant': typeof ApplicantIndexRoute
+  '/company/$companyId/update': typeof CompanyCompanyIdUpdateRoute
   '/job-listing/$jobId/update': typeof JobListingJobIdUpdateRoute
+  '/company/$companyId': typeof CompanyCompanyIdIndexRoute
   '/job-listing/$jobId': typeof JobListingJobIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/applicant': typeof ApplicantRoute
   '/dashboard': typeof DashboardRoute
+  '/applicant/edit': typeof ApplicantEditRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/company/$companyId': typeof CompanyCompanyIdRoute
+  '/company/create': typeof CompanyCreateRoute
   '/job-listing/create': typeof JobListingCreateRoute
-  '/company': typeof CompanyIndexRoute
+  '/applicant': typeof ApplicantIndexRoute
+  '/company/$companyId/update': typeof CompanyCompanyIdUpdateRoute
   '/job-listing/$jobId/update': typeof JobListingJobIdUpdateRoute
+  '/company/$companyId': typeof CompanyCompanyIdIndexRoute
   '/job-listing/$jobId': typeof JobListingJobIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/applicant': typeof ApplicantRoute
   '/dashboard': typeof DashboardRoute
+  '/applicant/edit': typeof ApplicantEditRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/company/$companyId': typeof CompanyCompanyIdRoute
+  '/company/create': typeof CompanyCreateRoute
   '/job-listing/create': typeof JobListingCreateRoute
-  '/company/': typeof CompanyIndexRoute
+  '/applicant/': typeof ApplicantIndexRoute
+  '/company/$companyId/update': typeof CompanyCompanyIdUpdateRoute
   '/job-listing/$jobId/update': typeof JobListingJobIdUpdateRoute
+  '/company/$companyId/': typeof CompanyCompanyIdIndexRoute
   '/job-listing/$jobId/': typeof JobListingJobIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/applicant'
     | '/dashboard'
+    | '/applicant/edit'
     | '/auth/login'
     | '/auth/sign-up'
-    | '/company/$companyId'
+    | '/company/create'
     | '/job-listing/create'
-    | '/company'
+    | '/applicant'
+    | '/company/$companyId/update'
     | '/job-listing/$jobId/update'
+    | '/company/$companyId'
     | '/job-listing/$jobId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/applicant'
     | '/dashboard'
+    | '/applicant/edit'
     | '/auth/login'
     | '/auth/sign-up'
-    | '/company/$companyId'
+    | '/company/create'
     | '/job-listing/create'
-    | '/company'
+    | '/applicant'
+    | '/company/$companyId/update'
     | '/job-listing/$jobId/update'
+    | '/company/$companyId'
     | '/job-listing/$jobId'
   id:
     | '__root__'
     | '/'
-    | '/applicant'
     | '/dashboard'
+    | '/applicant/edit'
     | '/auth/login'
     | '/auth/sign-up'
-    | '/company/$companyId'
+    | '/company/create'
     | '/job-listing/create'
-    | '/company/'
+    | '/applicant/'
+    | '/company/$companyId/update'
     | '/job-listing/$jobId/update'
+    | '/company/$companyId/'
     | '/job-listing/$jobId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ApplicantRoute: typeof ApplicantRoute
   DashboardRoute: typeof DashboardRoute
+  ApplicantEditRoute: typeof ApplicantEditRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
-  CompanyCompanyIdRoute: typeof CompanyCompanyIdRoute
+  CompanyCreateRoute: typeof CompanyCreateRoute
   JobListingCreateRoute: typeof JobListingCreateRoute
-  CompanyIndexRoute: typeof CompanyIndexRoute
+  ApplicantIndexRoute: typeof ApplicantIndexRoute
+  CompanyCompanyIdUpdateRoute: typeof CompanyCompanyIdUpdateRoute
   JobListingJobIdUpdateRoute: typeof JobListingJobIdUpdateRoute
+  CompanyCompanyIdIndexRoute: typeof CompanyCompanyIdIndexRoute
   JobListingJobIdIndexRoute: typeof JobListingJobIdIndexRoute
 }
 
@@ -169,13 +195,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/applicant': {
-      id: '/applicant'
-      path: '/applicant'
-      fullPath: '/applicant'
-      preLoaderRoute: typeof ApplicantRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -183,11 +202,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/company/': {
-      id: '/company/'
-      path: '/company'
-      fullPath: '/company'
-      preLoaderRoute: typeof CompanyIndexRouteImport
+    '/applicant/': {
+      id: '/applicant/'
+      path: '/applicant'
+      fullPath: '/applicant'
+      preLoaderRoute: typeof ApplicantIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/job-listing/create': {
@@ -197,11 +216,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JobListingCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/company/$companyId': {
-      id: '/company/$companyId'
-      path: '/company/$companyId'
-      fullPath: '/company/$companyId'
-      preLoaderRoute: typeof CompanyCompanyIdRouteImport
+    '/company/create': {
+      id: '/company/create'
+      path: '/company/create'
+      fullPath: '/company/create'
+      preLoaderRoute: typeof CompanyCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/sign-up': {
@@ -218,11 +237,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/applicant/edit': {
+      id: '/applicant/edit'
+      path: '/applicant/edit'
+      fullPath: '/applicant/edit'
+      preLoaderRoute: typeof ApplicantEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/job-listing/$jobId/': {
       id: '/job-listing/$jobId/'
       path: '/job-listing/$jobId'
       fullPath: '/job-listing/$jobId'
       preLoaderRoute: typeof JobListingJobIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/company/$companyId/': {
+      id: '/company/$companyId/'
+      path: '/company/$companyId'
+      fullPath: '/company/$companyId'
+      preLoaderRoute: typeof CompanyCompanyIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/job-listing/$jobId/update': {
@@ -232,19 +265,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JobListingJobIdUpdateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/company/$companyId/update': {
+      id: '/company/$companyId/update'
+      path: '/company/$companyId/update'
+      fullPath: '/company/$companyId/update'
+      preLoaderRoute: typeof CompanyCompanyIdUpdateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ApplicantRoute: ApplicantRoute,
   DashboardRoute: DashboardRoute,
+  ApplicantEditRoute: ApplicantEditRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignUpRoute: AuthSignUpRoute,
-  CompanyCompanyIdRoute: CompanyCompanyIdRoute,
+  CompanyCreateRoute: CompanyCreateRoute,
   JobListingCreateRoute: JobListingCreateRoute,
-  CompanyIndexRoute: CompanyIndexRoute,
+  ApplicantIndexRoute: ApplicantIndexRoute,
+  CompanyCompanyIdUpdateRoute: CompanyCompanyIdUpdateRoute,
   JobListingJobIdUpdateRoute: JobListingJobIdUpdateRoute,
+  CompanyCompanyIdIndexRoute: CompanyCompanyIdIndexRoute,
   JobListingJobIdIndexRoute: JobListingJobIdIndexRoute,
 }
 export const routeTree = rootRouteImport
