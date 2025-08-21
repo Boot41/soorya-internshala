@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import GlobalHeader from '@/components/global-header'
 import GradientLayout from '@/layouts/gradient-layout'
 import GlassLayout from '@/layouts/glass-layout'
@@ -41,9 +41,14 @@ function RouteComponent() {
               )}
             </CardTitle>
             {!isLoading && !isError && (
-              <CardDescription>
-                {data?.location}
-              </CardDescription>
+              <div className="flex flex-col items-center gap-1">
+                <CardDescription>{data?.location}</CardDescription>
+                {data?.company_name && data?.company_id && (
+                  <Link to="/company/$companyId" params={{ companyId: data.company_id }} className="underline text-lg font-semibold text-foreground/90">
+                    {data.company_name}
+                  </Link>
+                )}
+              </div>
             )}
           </CardHeader>
           {/* Header action: show status if already applied, else show Apply button */}
