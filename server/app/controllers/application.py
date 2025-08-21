@@ -43,3 +43,14 @@ def get_my_application_status_controller(
     if not app:
         return {"has_applied": False, "application_id": None, "status": None}
     return {"has_applied": True, "application_id": app.application_id, "status": str(app.status)}
+
+
+def list_my_applications_controller(
+    db: Session,
+    *,
+    current_user,
+):
+    # Ensure user has an applicant profile
+    applicant = repo.ensure_applicant_profile(db, user_id=current_user.user_id)
+    # Fetch applications with job and company info
+    return repo.list_applications_for_applicant(db, applicant_id=applicant.applicant_id)
