@@ -23,15 +23,21 @@ export default function GlobalHeader({className}: {className?: string}) {
                 </Link>
 
                 <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
-                    <Link to="/" className="hover:text-foreground">
-                        Home
-                    </Link>
-                    <a href="#recent-internships" className="hover:text-foreground">
+                    {userId && <Link to="/dashboard" className="hover:text-foreground">
+                        Dashboard
+                    </Link>}
+                    {userType === 'applicant' && <Link to="/job-listing" className="hover:text-foreground">
                         Internships
-                    </a>
-                    <a href="#credibility" className="hover:text-foreground">
-                        Credibility
-                    </a>
+                    </Link>}
+                    {userType === 'recruiter' && <Link to="/company" className="hover:text-foreground">
+                        Company
+                    </Link>}
+                    {userType === 'recruiter' && <Link to="/job-listing/create" className="hover:text-foreground">
+                        Create an Opening
+                    </Link>}
+                    {userType === 'applicant' && <Link to="/applicant" className="hover:text-foreground">
+                        View Profile
+                    </Link>}
                 </nav>
 
                 <div className="flex items-center gap-2">

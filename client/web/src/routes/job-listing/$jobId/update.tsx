@@ -13,8 +13,8 @@ function RouteComponent() {
   useRestriction('recruiter')
   const { jobId } = Route.useParams()
   return (
-      <GradientLayout>
-        <GlobalHeader />
+      <GradientLayout className='!pt-0 !px-0 justify-start'>
+        <GlobalHeader className='w-full' />
         <GlassLayout>
           <UpdateJobListingForm jobId={jobId} />
         </GlassLayout>

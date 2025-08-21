@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import GlobalHeader from '@/components/global-header'
 import GradientLayout from '@/layouts/gradient-layout'
 import GlassLayout from '@/layouts/glass-layout'
@@ -9,6 +9,7 @@ import { Button } from '@/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/select'
 import { useRestriction } from '@/hooks/use-restriction'
 import { useRecruiterCompany } from '@/hooks/use-recruiter-company'
+import { Pencil } from 'lucide-react'
 
 export const Route = createFileRoute('/company/')({
   component: RouteComponent,
@@ -42,8 +43,18 @@ function RouteComponent() {
       <GlassLayout className='flex-1 justify-center' hideBrand>
         {/* If recruiter has a company, show the company details (same UI as /company/$companyId) */}
         {recruiterCompanyId ? (
-          <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
-            <CardHeader className="items-center text-center gap-2">
+          <div className="relative">
+            <Link
+              to="/company/$companyId/update"
+              params={{ companyId: recruiterCompanyId as string }}
+              aria-label="Edit company"
+              className="z-10 absolute right-3 top-3 inline-flex items-center justify-center rounded-md border border-white/15 bg-white/5 p-2 text-white/90 shadow-sm hover:bg-white/10"
+              title="Edit"
+            >
+              <Pencil className="h-4 w-4 text-primary" />
+            </Link>
+            <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
+              <CardHeader className="items-center text-center gap-2">
               {/* Logo */}
               {!companyLoading && !companyIsError && (
                 <div className="flex items-center justify-center pb-2">
@@ -68,19 +79,20 @@ function RouteComponent() {
                   </a>
                 </CardDescription>
               )}
-            </CardHeader>
-            {!companyLoading && !companyIsError && company && (
-              <CardContent>
-                <div className="grid gap-6">
-                  <Row label="Description" value={company.description ?? undefined} />
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <Row label="Industry" value={company.industry ?? undefined} />
-                    <Row label="Headquarters" value={company.headquarters ?? undefined} />
+              </CardHeader>
+              {!companyLoading && !companyIsError && company && (
+                <CardContent>
+                  <div className="grid gap-6">
+                    <Row label="Description" value={company.description ?? undefined} />
+                    <div className="grid gap-6 md:grid-cols-2">
+                      <Row label="Industry" value={company.industry ?? undefined} />
+                      <Row label="Headquarters" value={company.headquarters ?? undefined} />
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            )}
-          </Card>
+                </CardContent>
+              )}
+            </Card>
+          </div>
         ) : (
           // Otherwise, allow recruiter to select an existing company or create a new one
           <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl mx-auto w-full max-w-xl">

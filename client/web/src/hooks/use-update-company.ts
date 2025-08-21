@@ -6,9 +6,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getCompany, updateCompany } from "@/api/company"
 import { getErrorMessage } from "@/utils/error"
 import { toast } from "sonner"
+import { useNavigate } from "@tanstack/react-router"
 
 export function useUpdateCompany(companyId: string) {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const form = useForm<CompanyPayload>({
     resolver: zodResolver(companySchema),
     defaultValues: {
@@ -50,6 +52,8 @@ export function useUpdateCompany(companyId: string) {
       await queryClient.invalidateQueries({ queryKey: ["company", companyId] })
       // Reset form with latest submitted values to reflect UI immediately
       form.reset(variables)
+      // Navigate back to company overview
+      navigate({ to: "/company" })
     },
     onError: (err) => {
       toast.error(getErrorMessage(err))

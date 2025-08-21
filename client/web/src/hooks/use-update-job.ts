@@ -99,9 +99,14 @@ export function useUpdateJob(jobId: string) {
     form.setValue("job_type", jobType, { shouldDirty: true, shouldValidate: true })
   }
 
+  const setExperienceLevel = (exp: string) => {
+    form.setValue("experience_level", exp, { shouldDirty: true, shouldValidate: true })
+  }
+
   const expiresAt = form.watch("expires_at")
   const jobType = form.watch("job_type")
   const status = form.watch("status")
+  const experienceLevel = form.watch("experience_level")
 
   const handleSubmit = form.handleSubmit(async (values) => {
     const payload: JobListingUpdatePayload = {
@@ -120,6 +125,7 @@ export function useUpdateJob(jobId: string) {
     setJobType,
     setStatus,
     setExpiresAt,
+    setExperienceLevel,
     addSkill,
     removeSkill,
     skills,
@@ -128,5 +134,6 @@ export function useUpdateJob(jobId: string) {
     expiresAt,
     jobType,
     status,
+    experienceLevel,
   }
 }
