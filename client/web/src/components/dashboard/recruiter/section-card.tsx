@@ -2,10 +2,10 @@ import { IconTrendingUp } from "@tabler/icons-react"
 
 import { Badge } from "@/ui/badge"
 import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "@/ui/card"
-import { useRecruiterDashboard } from "@/hooks/use-recruiter-dashboard"
+import { useDashboardSection } from "@/hooks/use-dashboard-section"
 
 export function SectionCards() {
-  const { stats, isLoading } = useRecruiterDashboard()
+  const { stats, isLoading } = useDashboardSection()
 
   const value = (v?: number) => (typeof v === "number" ? v.toLocaleString() : "—")
   const loading = isLoading && !stats

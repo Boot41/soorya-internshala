@@ -12,34 +12,12 @@ import { Badge } from "@/ui/badge"
 import { Button } from "@/ui/button"
 import { IconLoader } from "@tabler/icons-react"
 import { Link } from "@tanstack/react-router"
+import { useRecruiterDashboard } from "@/hooks/use-recruiter-dashboard"
+
+
 
 export default function RecruiterDashboard() {
-  const qc = useQueryClient()
-  const { recruiterCompanyId } = useRecruiterCompany()
-
-  const [selectedJobId, setSelectedJobId] = React.useState<string | undefined>(undefined)
-
-  const jobsQ = useQuery({
-    queryKey: ["recruiter", "jobs", recruiterCompanyId ?? null],
-    queryFn: () => listJobListings(recruiterCompanyId ? { companyId: recruiterCompanyId } : undefined),
-    enabled: !!recruiterCompanyId,
-  })
-
-  const appsQ = useQuery<JobApplicationItem[], Error>({
-    queryKey: ["applications", selectedJobId ?? null],
-    queryFn: () => listApplicationsByJob(selectedJobId!),
-    enabled: !!selectedJobId,
-  })
-
-  const { mutateAsync: changeStatus, isPending: isUpdatingStatus } = useMutation({
-    mutationFn: ({ applicationId, status }: { applicationId: string; status: ApplicationStatus }) =>
-      updateApplicationStatus(applicationId, status),
-    onSuccess: async () => {
-      toast.success("Application status updated")
-      await qc.invalidateQueries({ queryKey: ["applications", selectedJobId ?? null] })
-    },
-    onError: (err: any) => toast.error(err?.message ?? "Failed to update status"),
-  })
+  const { selectedJobId, setSelectedJobId, jobsQ, appsQ, changeStatus, isUpdatingStatus } = useRecruiterDashboard()
 
   return (
     <div className="flex flex-1 flex-col">

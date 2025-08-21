@@ -1,21 +1,44 @@
-import { useQuery } from "@tanstack/react-query"
-import api from "@/api/client"
-import type { RecruiterDashboardStats } from "@/types/recruiter"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useRecruiterCompany } from "./use-recruiter-company"
+import { useState } from "react"
+import { listJobListings } from "@/api/job-listing"
+import { listApplicationsByJob, updateApplicationStatus, type ApplicationStatus, type JobApplicationItem } from "@/api/applications"
+import { toast } from "sonner"
 
-async function fetchRecruiterDashboardStats() {
-  const { data } = await api.get<RecruiterDashboardStats>("/recruiter/dashboard/stats")
-  return data
-}
-
-export function useRecruiterDashboard() {
-  const query = useQuery<RecruiterDashboardStats, Error, RecruiterDashboardStats, ["recruiter-dashboard-stats"]>({
-    queryKey: ["recruiter-dashboard-stats"],
-    queryFn: fetchRecruiterDashboardStats,
-    staleTime: 60_000,
-  })
-
-  return {
-    ...query,
-    stats: query.data,
+export const useRecruiterDashboard = ()=> {
+    const qc = useQueryClient()
+    const { recruiterCompanyId } = useRecruiterCompany()
+  
+    const [selectedJobId, setSelectedJobId] = useState<string | undefined>(undefined)
+  
+    const jobsQ = useQuery({
+      queryKey: ["recruiter", "jobs", recruiterCompanyId ?? null],
+      queryFn: () => listJobListings(recruiterCompanyId ? { companyId: recruiterCompanyId } : undefined),
+      enabled: !!recruiterCompanyId,
+    })
+  
+    const appsQ = useQuery<JobApplicationItem[], Error>({
+      queryKey: ["applications", selectedJobId ?? null],
+      queryFn: () => listApplicationsByJob(selectedJobId!),
+      enabled: !!selectedJobId,
+    })
+  
+    const { mutateAsync: changeStatus, isPending: isUpdatingStatus } = useMutation({
+      mutationFn: ({ applicationId, status }: { applicationId: string; status: ApplicationStatus }) =>
+        updateApplicationStatus(applicationId, status),
+      onSuccess: async () => {
+        toast.success("Application status updated")
+        await qc.invalidateQueries({ queryKey: ["applications", selectedJobId ?? null] })
+      },
+      onError: (err: any) => toast.error(err?.message ?? "Failed to update status"),
+    })
+  
+    return {
+      selectedJobId,
+      setSelectedJobId,
+      jobsQ,
+      appsQ,
+      changeStatus,
+      isUpdatingStatus,
+    }
   }
-}
