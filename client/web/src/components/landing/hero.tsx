@@ -1,10 +1,15 @@
+import { useAuthStore } from '@/store/auth'
 import Marquee from '@/ui/marquee'
+import { useNavigate } from '@tanstack/react-router'
 
 interface HeroProps {
   onScrollToCredibility?: () => void
 }
 
 export default function Hero({ onScrollToCredibility }: HeroProps) {
+  const { accessToken } = useAuthStore()
+  const navigate = useNavigate()
+
   return (
     <section className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-gradient-to-b from-background to-primary/25 px-6 py-16 text-center">
       <div className="absolute inset-0 -z-10 bg-radial-gradient-primary" />
@@ -17,13 +22,13 @@ export default function Hero({ onScrollToCredibility }: HeroProps) {
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <button
-            className="w-full rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm hover:opacity-90 sm:w-auto"
-            onClick={() => {}}
+            className="cursor-pointer w-full rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm hover:opacity-90 sm:w-auto"
+            onClick={() => { !accessToken ? navigate({ to: '/auth/login' }) : navigate({ to: '/dashboard' }) }}
           >
             Get Personalized Internships
           </button>
           <button
-            className="w-full rounded-md border border-border px-5 py-3 text-sm font-medium text-foreground hover:bg-accent sm:w-auto"
+            className="cursor-pointer w-full rounded-md border border-border px-5 py-3 text-sm font-medium text-foreground hover:bg-accent sm:w-auto"
             onClick={onScrollToCredibility}
           >
             See why students trust us

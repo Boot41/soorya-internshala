@@ -26,12 +26,12 @@ export default function GlobalHeader() {
                 </nav>
 
                 <div className="flex items-center gap-2">
-                    <button className="rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:bg-accent">
+                    <Link to="/auth/login" className="rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:bg-accent">
                         Log in
-                    </button>
-                    <button className="rounded-md bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90">
+                    </Link>
+                    <Link to="/auth/sign-up" className="rounded-md bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90">
                         Sign up
-                    </button>
+                    </Link>
                 </div>
             </div>
         </header>
