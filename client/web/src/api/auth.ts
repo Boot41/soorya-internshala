@@ -33,3 +33,13 @@ export async function refresh(): Promise<TokenResponse> {
     throw new Error(getErrorMessage(err))
   }
 }
+
+export async function logout(): Promise<{ message: string }> {
+  try {
+    const { data } = await api.post<{ message: string }>("/auth/logout")
+    return data
+  } catch (err) {
+    console.error("[logout]", err)
+    throw new Error(getErrorMessage(err))
+  }
+}

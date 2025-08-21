@@ -4,6 +4,7 @@ from app.schemas.user import UserCreate, UserRegisterResponse, Token, UserLogin
 from app.repository import user as user_repository
 from app.db.session import get_db
 from app.lib.jwt import create_access_token, create_refresh_token, decode_token
+from app.controllers import auth as auth_controller
 from app.core.config import settings
 from app.lib import security
 
@@ -63,3 +64,9 @@ def refresh_access_token(request: Request, db: Session = Depends(get_db)):
     
     new_access_token = create_access_token(data={"sub": user.email})
     return {"access_token": new_access_token, "token_type": "bearer"}
+
+
+@router.post("/logout")
+def logout(response: Response):
+    result = auth_controller.clear_refresh_token_controller(response)
+    return result

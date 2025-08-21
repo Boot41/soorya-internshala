@@ -18,7 +18,7 @@ function RouteComponent() {
   return (
       <GradientLayout className='!pt-0 !px-0 justify-start'>
         <GlobalHeader className='w-full' />
-        <GlassLayout hideBrand>
+        <GlassLayout className='flex-1 justify-center' hideBrand>
           <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
             <CardHeader className="items-center text-center gap-2">
               {/* Logo */}

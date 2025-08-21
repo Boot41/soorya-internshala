@@ -7,7 +7,7 @@ import { userStore } from '@/store/user'
 
 export function StartupAuthRefresh() {
   const { mutateAsync: refreshMutateAsync } = useMutation({
-    mutationKey: ["auth", "refesh"],
+    mutationKey: ["auth", "refresh"],
     mutationFn: () => refresh(),
     onSuccess: (data) => {
       if (data?.access_token) 
@@ -32,8 +32,10 @@ export function StartupAuthRefresh() {
   })
 
   useEffect(() => {
+    // Run refresh once on mount
     refreshMutateAsync()
-  }, [refreshMutateAsync])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const token = useAuthStore((s) => s.accessToken)
   useEffect(() => {
@@ -44,7 +46,9 @@ export function StartupAuthRefresh() {
       userStore.clear()
       resetFetchMe()
     }
-  }, [token, fetchMeMutate, resetFetchMe])
+    // Only react to token changes to avoid loops due to function identity
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token])
 
   console.log({user: userStore.state})
 
