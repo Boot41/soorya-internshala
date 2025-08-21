@@ -42,13 +42,5 @@ def update_company(
     db: Session = Depends(get_db),
     current_user=Depends(require_recruiter),
 ):
-    company = company_repository.get_company(db, company_id)
-    if not company:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
-
-    recruiter = company_repository.get_recruiter_by_user_id(db, current_user.user_id)
-    if not recruiter or recruiter.company_id != company.company_id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this company")
-
-    updated = company_repository.update_company(db, company=company, update_data=company_update.dict(exclude_unset=True))
-    return {"message": "Company profile updated successfully"}
+    company = company_repository.update_company(db, company_id, company_update, current_user)
+    return {"message": "Company profile updated successfully", "company": company}

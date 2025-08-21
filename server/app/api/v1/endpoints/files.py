@@ -14,13 +14,8 @@ async def upload_resume(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    try:
-        url = await save_uploaded_file(file, file_type="resume", db=db, current_user=current_user)
-        return {"url": url}
-    except HTTPException:
-        raise
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to upload resume")
+    url = await save_uploaded_file(file, file_type="resume", db=db, current_user=current_user)
+    return {"url": url}
 
 
 @router.post("/upload/profile")
@@ -29,13 +24,8 @@ async def upload_profile_picture(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    try:
-        url = await save_uploaded_file(file, file_type="profile", db=db, current_user=current_user)
-        return {"url": url}
-    except HTTPException:
-        raise
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to upload profile picture")
+    url = await save_uploaded_file(file, file_type="profile", db=db, current_user=current_user)
+    return {"url": url}
 
 
 @router.post("/upload/logo")
@@ -44,10 +34,5 @@ async def upload_company_logo(
     db: Session = Depends(get_db),
     current_user=Depends(require_recruiter),
 ):
-    try:
-        url = await save_uploaded_file(file, file_type="logo", db=db, current_user=current_user)
-        return {"url": url}
-    except HTTPException:
-        raise
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to upload company logo")
+    url = await save_uploaded_file(file, file_type="logo", db=db, current_user=current_user)
+    return {"url": url}

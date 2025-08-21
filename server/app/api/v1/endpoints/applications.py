@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_current_user, require_recruiter
 from app.db.session import get_db
 from app.repository import application as repo
+from app.controllers import application as app_controller
 from app.schemas.application import (
     ApplicationListItem,
     UpdateApplicationStatusRequest,
@@ -22,9 +23,7 @@ def list_applications(
     db: Session = Depends(get_db),
     _=Depends(require_recruiter),
 ):
-    # Ensure job exists (consistent 404 if job invalid)
-    repo.ensure_job_exists(db, job_id=job_id)
-    return repo.list_applications_for_job(db, job_id=job_id)
+    return app_controller.list_applications_for_job_controller(db, job_id=job_id)
 
 
 @router.patch("/{application_id}", response_model=UpdateApplicationStatusResponse)
@@ -34,5 +33,9 @@ def update_application(
     db: Session = Depends(get_db),
     _=Depends(require_recruiter),
 ):
-    repo.update_application_status(db, application_id=application_id, status_value=payload.status)
+    app_controller.update_application_status_controller(
+        db,
+        application_id=application_id,
+        status_value=payload.status,
+    )
     return {"message": "Application status updated"}

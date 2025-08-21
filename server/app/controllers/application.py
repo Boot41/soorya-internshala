@@ -54,3 +54,25 @@ def list_my_applications_controller(
     applicant = repo.ensure_applicant_profile(db, user_id=current_user.user_id)
     # Fetch applications with job and company info
     return repo.list_applications_for_applicant(db, applicant_id=applicant.applicant_id)
+
+
+def list_applications_for_job_controller(
+    db: Session,
+    *,
+    job_id: UUID,
+):
+    """Recruiter-facing: list applications for a given job."""
+    # Ensure job exists (consistent 404 if invalid)
+    repo.ensure_job_exists(db, job_id=job_id)
+    return repo.list_applications_for_job(db, job_id=job_id)
+
+
+def update_application_status_controller(
+    db: Session,
+    *,
+    application_id: UUID,
+    status_value: str,
+):
+    """Recruiter-facing: update application status."""
+    app = repo.update_application_status(db, application_id=application_id, status_value=status_value)
+    return app

@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import require_recruiter
 from app.db.session import get_db
-from app.controllers.recruiter_dashboard import get_recruiter_dashboard_stats_controller
-from app.schemas.recruiter_dashboard import RecruiterDashboardStats
+from app.controllers.dashboard import get_recruiter_dashboard_stats_controller
+from app.schemas.dashboard import RecruiterDashboardStats
 
 router = APIRouter()
 

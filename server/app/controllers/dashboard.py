@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from app.repository.recruiter_dashboard import get_recruiter_dashboard_stats
+from app.repository.dashboard import get_recruiter_dashboard_stats
 from app.repository.company import get_recruiter_by_user_id
-from app.schemas.recruiter_dashboard import RecruiterDashboardStats
+from app.schemas.dashboard import RecruiterDashboardStats
 from fastapi import HTTPException, status
 
 

@@ -1,9 +1,10 @@
+from typing import Any
 from uuid import UUID
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 
-from app.db.models import Company, Recruiter
-from app.schemas.company import CompanyCreate
+from app.db.models import Company, Recruiter, User
+from app.schemas.company import CompanyCreate, CompanyUpdate
 
 
 def get_company(db: Session, company_id: UUID) -> Company | None:
@@ -47,7 +48,7 @@ def create_company(db: Session, *, recruiter_user_id: UUID, company_in: CompanyC
     return company
 
 
-def update_company(db: Session, *, company: Company, update_data: dict) -> Company:
+def _update_company_from_dict(db: Session, *, company: Company, update_data: dict) -> Company:
     for field, value in update_data.items():
         if not hasattr(company, field):
             continue
@@ -64,3 +65,15 @@ def update_company(db: Session, *, company: Company, update_data: dict) -> Compa
     db.commit()
     db.refresh(company)
     return company
+
+def update_company(db: Session, company_id: UUID, company_update: CompanyUpdate, current_user: Any):
+    company = get_company(db, company_id)
+    if not company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
+
+    recruiter = get_recruiter_by_user_id(db, current_user.user_id)
+    if not recruiter or recruiter.company_id != company.company_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this company")
+
+    updated = _update_company_from_dict(db, company=company, update_data=company_update.dict(exclude_unset=True))
+    return updated
