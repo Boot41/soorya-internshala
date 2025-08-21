@@ -3,7 +3,7 @@ import { create } from "zustand"
 export type UserCore = {
   userId: string | null
   fullName: string | null
-  userType: "applicant" | "recruiter" | null
+  userType: string | null
 }
 
 export type UserStore = UserCore & {
