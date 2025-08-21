@@ -50,8 +50,9 @@ def update_job_listing(
 def list_job_listings(
     db: Session = Depends(get_db),
     company_id: Optional[UUID] = None,
+    limit: Optional[int] = None,
 ):
-    jobs = controller.list_job_listings_controller(db, company_id=company_id)
+    jobs = controller.list_job_listings_controller(db, company_id=company_id, limit=limit)
     return jobs
 
 

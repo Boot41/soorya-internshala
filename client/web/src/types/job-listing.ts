@@ -27,6 +27,7 @@ export type JobListingUpdatePayload = {
 export type JobListing = {
   job_id: string;
   company_id: string;
+  company_name: string;
   recruiter_id: string;
   title: string;
   description: string;

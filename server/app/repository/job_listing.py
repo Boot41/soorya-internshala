@@ -4,18 +4,57 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 
-from app.db.models import JobPosting
+from app.db.models import JobPosting, Company
 
 
-def get_job_listing(db: Session, job_id: UUID) -> JobPosting | None:
-    return db.query(JobPosting).filter(JobPosting.job_id == job_id).first()
+def _to_response_dict(job: JobPosting, *, company_name: str) -> dict:
+    return {
+        "job_id": job.job_id,
+        "company_id": job.company_id,
+        "company_name": company_name,
+        "recruiter_id": job.recruiter_id,
+        "title": job.title,
+        "description": job.description,
+        "requirements": job.requirements,
+        "skills_required": job.skills_required,
+        "location": job.location,
+        "experience_level": job.experience_level,
+        "job_type": job.job_type,
+        "salary_range": job.salary_range,
+        "expires_at": job.expires_at,
+        "status": job.status,
+        "posted_at": job.posted_at,
+        "updated_at": job.updated_at,
+    }
 
 
-def list_job_listings(db: Session, *, company_id: Optional[UUID] = None) -> List[JobPosting]:
-    q = db.query(JobPosting)
+def get_job_listing(db: Session, job_id: UUID) -> dict | None:
+    row = (
+        db.query(JobPosting, Company.name.label("company_name"))
+        .join(Company, Company.company_id == JobPosting.company_id)
+        .filter(JobPosting.job_id == job_id)
+        .first()
+    )
+    if not row:
+        return None
+    job, company_name = row
+    return _to_response_dict(job, company_name=company_name)
+
+
+def list_job_listings(
+    db: Session,
+    *,
+    company_id: Optional[UUID] = None,
+    limit: Optional[int] = None,
+) -> List[dict]:
+    q = db.query(JobPosting, Company.name.label("company_name")).join(Company, Company.company_id == JobPosting.company_id)
     if company_id:
         q = q.filter(JobPosting.company_id == company_id)
-    return q.order_by(JobPosting.posted_at.desc()).all()
+    q = q.order_by(JobPosting.posted_at.desc())
+    if isinstance(limit, int) and limit > 0:
+        q = q.limit(limit)
+    rows = q.all()
+    return [_to_response_dict(job, company_name=company_name) for job, company_name in rows]
 
 
 def create_job_listing(

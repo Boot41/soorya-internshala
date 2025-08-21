@@ -42,6 +42,7 @@ class JobListingUpdate(BaseModel):
 class JobListingResponse(JobListingBase):
     job_id: UUIDType
     company_id: UUIDType
+    company_name: str
     recruiter_id: UUIDType
     posted_at: datetime
     updated_at: datetime

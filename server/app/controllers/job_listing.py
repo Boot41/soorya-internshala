@@ -68,5 +68,6 @@ def list_job_listings_controller(
     db: Session,
     *,
     company_id: Optional[UUID] = None,
+    limit: Optional[int] = None,
 ):
-    return repo.list_job_listings(db, company_id=company_id)
+    return repo.list_job_listings(db, company_id=company_id, limit=limit)

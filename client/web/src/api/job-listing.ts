@@ -40,3 +40,17 @@ export async function updateJobListing(jobId: string, payload: JobListingUpdateP
     throw new Error(getErrorMessage(err))
   }
 }
+
+export async function listJobListings(params?: { companyId?: string; limit?: number }): Promise<JobListing[]> {
+  try {
+    const search = new URLSearchParams()
+    if (params?.companyId) search.set("company_id", params.companyId)
+    if (typeof params?.limit === 'number') search.set("limit", String(params.limit))
+    const qs = search.toString()
+    const { data } = await api.get<JobListing[]>(`/job-listings/${qs ? `?${qs}` : ''}`)
+    return data
+  } catch (err) {
+    console.error("[listJobListings]", err)
+    throw new Error(getErrorMessage(err))
+  }
+}

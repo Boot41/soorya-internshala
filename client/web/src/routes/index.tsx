@@ -3,6 +3,7 @@ import Hero from '@/components/landing/hero'
 import RecentInternships from '@/components/landing/recent-internships'
 import Testimonials from '@/components/landing/testimonials'
 import { LandingGradientLayout } from '@/layouts/gradient-layout'
+import GlobalHeader from '@/components/global-header'
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
@@ -19,6 +20,7 @@ function LandingPage() {
 
   return (
     <LandingGradientLayout>
+      <GlobalHeader />
       <main className="bg-transparent">
         <Hero onScrollToCredibility={handleScrollToCredibility} />
         <div className='relative justify-between flex flex-col min-h-[calc(100vh-8rem)] items-center overflow-hidden bg-gradient-to-t from-background to-primary/25 px-6 py-16 text-center'>
