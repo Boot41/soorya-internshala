@@ -17,6 +17,7 @@ import { Route as CompanyCreateRouteImport } from './routes/company/create'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApplicantEditRouteImport } from './routes/applicant/edit'
+import { Route as ApplicantApplicantIdRouteImport } from './routes/applicant/$applicantId'
 import { Route as JobListingJobIdIndexRouteImport } from './routes/job-listing/$jobId/index'
 import { Route as CompanyCompanyIdIndexRouteImport } from './routes/company/$companyId/index'
 import { Route as JobListingJobIdUpdateRouteImport } from './routes/job-listing/$jobId/update'
@@ -62,6 +63,11 @@ const ApplicantEditRoute = ApplicantEditRouteImport.update({
   path: '/applicant/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApplicantApplicantIdRoute = ApplicantApplicantIdRouteImport.update({
+  id: '/applicant/$applicantId',
+  path: '/applicant/$applicantId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JobListingJobIdIndexRoute = JobListingJobIdIndexRouteImport.update({
   id: '/job-listing/$jobId/',
   path: '/job-listing/$jobId/',
@@ -86,6 +92,7 @@ const CompanyCompanyIdUpdateRoute = CompanyCompanyIdUpdateRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/applicant/$applicantId': typeof ApplicantApplicantIdRoute
   '/applicant/edit': typeof ApplicantEditRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/applicant/$applicantId': typeof ApplicantApplicantIdRoute
   '/applicant/edit': typeof ApplicantEditRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/applicant/$applicantId': typeof ApplicantApplicantIdRoute
   '/applicant/edit': typeof ApplicantEditRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/applicant/$applicantId'
     | '/applicant/edit'
     | '/auth/login'
     | '/auth/sign-up'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/applicant/$applicantId'
     | '/applicant/edit'
     | '/auth/login'
     | '/auth/sign-up'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/applicant/$applicantId'
     | '/applicant/edit'
     | '/auth/login'
     | '/auth/sign-up'
@@ -174,6 +186,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  ApplicantApplicantIdRoute: typeof ApplicantApplicantIdRoute
   ApplicantEditRoute: typeof ApplicantEditRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
@@ -244,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplicantEditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/applicant/$applicantId': {
+      id: '/applicant/$applicantId'
+      path: '/applicant/$applicantId'
+      fullPath: '/applicant/$applicantId'
+      preLoaderRoute: typeof ApplicantApplicantIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/job-listing/$jobId/': {
       id: '/job-listing/$jobId/'
       path: '/job-listing/$jobId'
@@ -278,6 +298,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  ApplicantApplicantIdRoute: ApplicantApplicantIdRoute,
   ApplicantEditRoute: ApplicantEditRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignUpRoute: AuthSignUpRoute,

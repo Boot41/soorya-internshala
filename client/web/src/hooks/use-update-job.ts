@@ -47,8 +47,8 @@ export function useUpdateJob(jobId: string) {
     },
   })
 
-  // Raw input for skills
-  const [skillsInput, setSkillsInput] = useState<string>("")
+  // Skills controls (badge-style)
+  const [skillDraft, setSkillDraft] = useState<string>("")
 
   useEffect(() => {
     if (!data) return
@@ -57,10 +57,7 @@ export function useUpdateJob(jobId: string) {
       title: data.title,
       description: data.description,
       requirements: data.requirements,
-      skills_required: (data.skills_required ?? "")
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
+      skills_required: (data.skills_required ?? "").split(",").map((s) => s.trim()).filter(Boolean),
       location: data.location,
       experience_level: data.experience_level ?? undefined,
       job_type: data.job_type,
@@ -68,22 +65,23 @@ export function useUpdateJob(jobId: string) {
       expires_at: data.expires_at ? new Date(data.expires_at) : undefined,
       status: data.status,
     })
-    setSkillsInput(
-      (data.skills_required ?? "")
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean)
-        .join(", ")
-    )
+    setSkillDraft("")
   }, [data])
 
-  const setSkills = (raw: string) => {
-    setSkillsInput(raw)
-    const skills = raw
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean)
-    form.setValue("skills_required", skills, { shouldDirty: true, shouldValidate: true })
+  const skills = form.watch("skills_required") ?? []
+  const addSkill = (s: string) => {
+    const v = s.trim()
+    if (!v) return
+    if (skills.includes(v)) return
+    form.setValue("skills_required", [...skills, v], { shouldDirty: true, shouldValidate: true })
+    setSkillDraft("")
+  }
+  const removeSkill = (s: string) => {
+    form.setValue(
+      "skills_required",
+      skills.filter((it: string) => it !== s),
+      { shouldDirty: true, shouldValidate: true }
+    )
   }
 
   const setExpiresAt = (date?: Date) => {
@@ -119,8 +117,11 @@ export function useUpdateJob(jobId: string) {
     setJobType,
     setStatus,
     setExpiresAt,
-    setSkills,
-    skillsInput,
+    addSkill,
+    removeSkill,
+    skills,
+    skillDraft,
+    setSkillDraft,
     expiresAt,
     jobType,
     status,

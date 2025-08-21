@@ -7,11 +7,12 @@ import { Textarea } from "@/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover"
 import { Calendar } from "@/ui/calendar"
-import { ChevronDownIcon } from "lucide-react"
+import { ChevronDownIcon, Plus, X } from "lucide-react"
 import { useCreateJob } from "@/hooks/use-create-jobs"
+import { Badge } from "@/ui/badge"
 
 export function CreateJobListingForm({ className, ...props }: React.ComponentProps<"div">) {
-  const { handleSubmit, register, isSubmitting, errors, setJobType, setStatus, setExpiresAt, setSkills, skillsInput, expiresAt } = useCreateJob()
+  const { handleSubmit, register, isSubmitting, errors, setJobType, setStatus, setExpiresAt, skills, addSkill, removeSkill, skillDraft, setSkillDraft, expiresAt } = useCreateJob()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
@@ -55,13 +56,17 @@ export function CreateJobListingForm({ className, ...props }: React.ComponentPro
             {/* Two columns */}
             <div className="grid gap-6 md:grid-cols-2">
               <div className="grid gap-3">
-                <Label htmlFor="skills_required">Skills (comma separated)</Label>
-                <Input
-                  id="skills_required"
-                  placeholder="e.g. Node.js, PostgreSQL, Docker"
-                  value={skillsInput}
-                  onChange={(e) => setSkills(e.target.value)}
-                />
+                <Label htmlFor="status">Status</Label>
+                <Select defaultValue="open" onValueChange={(val) => setStatus(val as any)}>
+                  <SelectTrigger className="w-full" id="status">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="open">Open</SelectItem>
+                    <SelectItem value="closed">Closed</SelectItem>
+                    <SelectItem value="draft">Draft</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="grid gap-3">
@@ -124,17 +129,38 @@ export function CreateJobListingForm({ className, ...props }: React.ComponentPro
               </div>
 
               <div className="grid gap-3 col-span-2">
-                <Label htmlFor="status">Status</Label>
-                <Select defaultValue="open" onValueChange={(val) => setStatus(val as any)}>
-                  <SelectTrigger className="w-full" id="status">
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="open">Open</SelectItem>
-                    <SelectItem value="closed">Closed</SelectItem>
-                    <SelectItem value="draft">Draft</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="skills_required">Skills</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="skills_required"
+                    placeholder="e.g. Node.js"
+                    value={skillDraft}
+                    onChange={(e) => setSkillDraft(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        addSkill(skillDraft)
+                      }
+                    }}
+                  />
+                  <Button type="button" variant="secondary" onClick={() => addSkill(skillDraft)} disabled={isSubmitting}>
+                    <Plus className="h-4 w-4 mr-1" /> Add
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {(skills ?? []).length > 0 ? (
+                    skills.map((s, idx) => (
+                      <Badge key={`${s}-${idx}`}>
+                        {s}
+                        <button type="button" className="ml-1" onClick={() => removeSkill(s)} aria-label={`Remove ${s}`}>
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-sm text-muted-foreground">No skills added</span>
+                  )}
+                </div>
               </div>
             </div>
 

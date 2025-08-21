@@ -67,6 +67,7 @@ class UserProfileApplicantResponse(BaseModel):
     experience: List[ExperienceItem] = []
     education: List[EducationItem] = []
     profile_picture_url: Optional[HttpUrl] = None
+    skills: List[str] = []
 
 
 class UserProfileRecruiterResponse(BaseModel):
@@ -86,3 +87,4 @@ class UpdateUserProfile(BaseModel):
     education: Optional[List[EducationItem]] = None
     profile_picture_url: Optional[HttpUrl] = None
     company_id: Optional[UUID] = None
+    skills: Optional[List[str]] = None

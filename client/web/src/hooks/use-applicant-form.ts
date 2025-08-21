@@ -4,6 +4,7 @@ import { getApplicantMe, updateApplicantProfile } from '@/api/applicant'
 import { getErrorMessage } from '@/utils/error'
 import { toast } from 'sonner'
 import { uploadProfilePicture, uploadResume as uploadResumeApi } from '@/api/files'
+import { useNavigate } from '@tanstack/react-router';
 
 export type ExperienceItem = {
   title?: string
@@ -19,6 +20,7 @@ export type ApplicantFormState = {
   experiences: ExperienceItem[]
   educations: EducationItem[]
   avatarUrl?: string
+  skills?: string[]
 }
 
 export type UseApplicantFormOptions = Partial<ApplicantFormState>
@@ -31,6 +33,9 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(initial?.avatarUrl)
   const [headline, setHeadline] = useState<string | undefined>(undefined)
   const [bio, setBio] = useState<string | undefined>(undefined)
+  const [skills, setSkills] = useState<string[]>([])
+
+  const navigate = useNavigate()
 
   const uploadAvatarMutation = useMutation({
     mutationKey: ["applicant", "profile-pic"],
@@ -70,36 +75,16 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     setAvatarUrl(profile.profile_picture_url ?? undefined)
     setHeadline(profile.headline ?? undefined)
     setBio(profile.bio ?? undefined)
+    setSkills((profile as any).skills ?? [])
   }, [profile])
 
   const updateMutation = useMutation({
     mutationFn: updateApplicantProfile,
-    onSuccess: (_data, variables) => {
+    onSuccess: (_data,) => {
       // Server currently returns a message; we don't rely on the response shape here
       queryClient.invalidateQueries({ queryKey: ['applicant', 'me'] })
-
-      // Optimistically update local editable state from variables if provided
-      if (variables?.experience) {
-        setExperiences((variables.experience ?? []).map((it) => ({
-          title: it?.title ?? undefined,
-          company: it?.company ?? undefined,
-        })))
-      }
-      if (variables?.education) {
-        setEducations((variables.education ?? []).map((it) => ({
-          degree: it?.degree ?? undefined,
-          university: it?.university ?? undefined,
-        })))
-      }
-      if (variables?.profile_picture_url !== undefined) {
-        setAvatarUrl(variables.profile_picture_url ?? undefined)
-      }
-      if (variables?.headline !== undefined) {
-        setHeadline(variables.headline ?? undefined)
-      }
-      if (variables?.bio !== undefined) {
-        setBio(variables.bio ?? undefined)
-      }
+      toast.success('Profile updated successfully')
+      navigate({ to: "/applicant" })
     },
     onError: (err) => {
       toast.error(getErrorMessage(err))
@@ -147,6 +132,7 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     avatarUrl,
     headline,
     bio,
+    skills,
     isUploadingAvatar: uploadAvatarMutation.isPending,
     isUploadingResume: uploadResumeMutation.isPending,
     isLoadingProfile: isLoading,
@@ -161,6 +147,7 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
     setAvatarUrl,
     setHeadline,
     setBio,
+    setSkills,
     uploadAvatar,
     uploadResume,
     saveProfile: (payload: Partial<ApplicantFormState> = {}) =>
@@ -170,6 +157,7 @@ export function useApplicantForm(initial?: UseApplicantFormOptions) {
         profile_picture_url: payload.avatarUrl ?? avatarUrl,
         headline: headline ?? null,
         bio: bio ?? null,
+        skills: payload.skills ?? skills,
       }),
     isSavingProfile: updateMutation.isPending,
   }

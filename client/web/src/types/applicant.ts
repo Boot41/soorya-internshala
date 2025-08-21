@@ -20,6 +20,7 @@ export type UserProfileApplicantResponse = {
   experience: ExperienceItem[]
   education: EducationItem[]
   profile_picture_url?: string | null
+  skills: string[]
 }
 
 export type UpdateUserProfile = {
@@ -30,6 +31,7 @@ export type UpdateUserProfile = {
   education?: EducationItem[] | null
   profile_picture_url?: string | null
   company_id?: string | null
+  skills?: string[] | null
 }
 
 export type ApplicantBasicsPayload = {
@@ -37,4 +39,5 @@ export type ApplicantBasicsPayload = {
   bio?: string | null
   experience?: ExperienceItem[] | null
   education?: EducationItem[] | null
+  skills?: string[] | null
 }

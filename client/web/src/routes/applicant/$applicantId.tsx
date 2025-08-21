@@ -1,33 +1,25 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import GradientLayout from '@/layouts/gradient-layout'
 import GlassLayout from '@/layouts/glass-layout'
-import { useApplicant } from '@/hooks/use-applicant'
+import { useApplicantById } from '@/hooks/use-applicant-by-id'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/ui/avatar'
-import { FileText, Pencil } from 'lucide-react'
 import { Row } from '@/ui/row'
+import { Avatar, AvatarFallback, AvatarImage } from '@/ui/avatar'
+import { FileText } from 'lucide-react'
 import { Badge } from '@/ui/badge'
 
-export const Route = createFileRoute('/applicant/')({
+export const Route = createFileRoute('/applicant/$applicantId')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { data, isLoading, isError, error } = useApplicant()
+  const { applicantId } = Route.useParams()
+  const { data, isLoading, isError, error } = useApplicantById(applicantId)
 
   return (
     <GradientLayout>
       <GlassLayout hideBrand>
-        <div className="relative">
-          <Link
-            to="/applicant/edit"
-            aria-label="Edit profile"
-            className="z-10 absolute right-3 top-3 inline-flex items-center justify-center rounded-md border border-white/15 bg-white/5 p-2 text-white/90 shadow-sm hover:bg-white/10"
-            title="Edit"
-          >
-            <Pencil className="h-4 w-4 text-primary" />
-          </Link>
-          <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
+        <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
           <CardHeader className="items-center text-center gap-2">
             {/* Avatar */}
             {!isLoading && !isError && (
@@ -39,7 +31,11 @@ function RouteComponent() {
               </div>
             )}
             <CardTitle className="text-xl">
-              {isLoading ? 'Loading profile…' : isError ? (error?.message ?? 'Failed to load profile') : `${data?.first_name ?? ''} ${data?.last_name ?? ''}`.trim() || 'Your Profile'}
+              {isLoading
+                ? 'Loading profile…'
+                : isError
+                ? (error?.message ?? 'Failed to load profile')
+                : `${data?.first_name ?? ''} ${data?.last_name ?? ''}`.trim() || 'Applicant'}
             </CardTitle>
             {!isLoading && !isError && (
               <CardDescription>{data?.email}</CardDescription>
@@ -118,12 +114,12 @@ function RouteComponent() {
                     <span className="text-sm">Not set</span>
                   )}
                 </div>
+
               </div>
             </CardContent>
           )}
         </Card>
-      </div>
-    </GlassLayout>
-  </GradientLayout>
+      </GlassLayout>
+    </GradientLayout>
   )
 }

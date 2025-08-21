@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.db.models import User
+from app.db.models import User, Applicant
 from app.schemas.user import UserCreate
 from app.lib.security import get_password_hash, verify_password
 from app.constants.user_types import UserType
@@ -36,3 +36,11 @@ def authenticate_user(db: Session, email: str, password: str) -> User | None:
     if not verify_password(password, user.password_hash):
         return None
     return user
+
+
+def get_user_by_id(db: Session, user_id) -> User | None:
+    return db.query(User).filter(User.user_id == user_id).first()
+
+
+def get_applicant_by_user_id(db: Session, user_id) -> Applicant | None:
+    return db.query(Applicant).filter(Applicant.applicant_id == user_id).first()

@@ -1,5 +1,5 @@
 import api from '@/api/client'
-import type { UpdateUserProfile, UserProfileApplicantResponse, ExperienceItem, EducationItem, ApplicantBasicsPayload } from '@/types/applicant'
+import type { UpdateUserProfile, UserProfileApplicantResponse, ApplicantBasicsPayload } from '@/types/applicant'
 import { getErrorMessage } from '@/utils/error'
 
 
@@ -9,6 +9,16 @@ export async function getApplicantMe() {
     return res.data
   } catch (err) {
     console.error('[getApplicantMe]', err)
+    throw new Error(getErrorMessage(err))
+  }
+}
+
+export async function getApplicantById(applicantId: string) {
+  try {
+    const res = await api.get<UserProfileApplicantResponse>(`/users/${applicantId}`)
+    return res.data
+  } catch (err) {
+    console.error('[getApplicantById]', err)
     throw new Error(getErrorMessage(err))
   }
 }

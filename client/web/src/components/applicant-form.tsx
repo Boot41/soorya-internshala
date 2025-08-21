@@ -4,9 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/ui/
 import { Input } from "@/ui/input"
 import { Label } from "@/ui/label"
 import { Textarea } from "@/ui/textarea"
-import { Pencil, FileText, Plus, Trash2 } from "lucide-react"
+import { Pencil, FileText, Plus, Trash2, X } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar"
 import { useApplicantForm } from "@/hooks/use-applicant-form"
+import { Badge } from "@/ui/badge"
 
 export function ApplicantForm({ className, ...props }: React.ComponentProps<"div">) {
   const {
@@ -31,6 +32,8 @@ export function ApplicantForm({ className, ...props }: React.ComponentProps<"div
     bio,
     setHeadline,
     setBio,
+    skills,
+    setSkills,
   } = useApplicantForm()
 
   return (
@@ -281,6 +284,62 @@ export function ApplicantForm({ className, ...props }: React.ComponentProps<"div
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Skills */}
+            <div className="grid gap-3">
+              <Label htmlFor="skill-input">Skills</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="skill-input"
+                  placeholder="e.g. React"
+                  disabled={isLoadingProfile || isSavingProfile}
+                  onKeyDown={(e) => {
+                    const target = e.target as HTMLInputElement
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      const v = target.value.trim()
+                      if (!v) return
+                      if (!skills.includes(v)) setSkills([...(skills ?? []), v])
+                      target.value = ''
+                    }
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    const input = document.getElementById('skill-input') as HTMLInputElement | null
+                    const v = input?.value.trim()
+                    if (!v) return
+                    if (!skills.includes(v)) setSkills([...(skills ?? []), v])
+                    if (input) input.value = ''
+                  }}
+                  disabled={isLoadingProfile || isSavingProfile}
+                >
+                  <Plus className="h-4 w-4 mr-1" /> Add
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {(skills ?? []).length > 0 ? (
+                  skills.map((s, idx) => (
+                    <Badge key={`${s}-${idx}`}>
+                      {s}
+                      <button
+                        type="button"
+                        className="ml-1 inline-flex items-center justify-center rounded hover:opacity-80"
+                        aria-label={`Remove ${s}`}
+                        onClick={() => setSkills(skills.filter((it) => it !== s))}
+                        disabled={isLoadingProfile || isSavingProfile}
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-sm text-muted-foreground">No skills added</span>
+                )}
               </div>
             </div>
 

@@ -48,21 +48,25 @@ export function useCreateJob() {
     register,
     formState: { errors, isSubmitting },
     setValue,
-    getValues,
     watch,
   } = form
 
-  // Raw text state to allow typing commas without aggressive normalization
-  const [skillsInput, setSkillsInput] = useState<string>((getValues("skills_required") ?? []).join(", "))
-
-  // Parse skills from a comma-separated string into array, but keep raw text intact
-  const setSkills = (raw: string) => {
-    setSkillsInput(raw)
-    const skills = raw
-      .split(",")
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0)
-    setValue("skills_required", skills, { shouldDirty: true, shouldValidate: true })
+  // Skills helpers (badge-style)
+  const [skillDraft, setSkillDraft] = useState<string>("")
+  const skills = watch("skills_required") ?? []
+  const addSkill = (s: string) => {
+    const v = s.trim()
+    if (!v) return
+    if (skills.includes(v)) return
+    setValue("skills_required", [...skills, v], { shouldDirty: true, shouldValidate: true })
+    setSkillDraft("")
+  }
+  const removeSkill = (s: string) => {
+    setValue(
+      "skills_required",
+      skills.filter((it) => it !== s),
+      { shouldDirty: true, shouldValidate: true }
+    )
   }
 
 
@@ -80,6 +84,21 @@ export function useCreateJob() {
 
   const expiresAt = watch("expires_at")
 
-  return { handleSubmit, register, isSubmitting, errors, setExpiresAt, setStatus, setJobType, setSkills, skillsInput, expiresAt }
+  return {
+    handleSubmit,
+    register,
+    isSubmitting,
+    errors,
+    setExpiresAt,
+    setStatus,
+    setJobType,
+    // skills controls
+    skills,
+    addSkill,
+    removeSkill,
+    skillDraft,
+    setSkillDraft,
+    expiresAt,
+  }
 }
 
