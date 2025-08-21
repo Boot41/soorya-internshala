@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import GlobalHeader from '@/components/global-header'
 import { useRestriction } from '@/hooks/use-restriction'
 import GradientLayout from '@/layouts/gradient-layout'
 import GlassLayout from '@/layouts/glass-layout'
@@ -19,7 +20,8 @@ function RouteComponent() {
   const { data, isLoading, isError, error } = useApplicantById(applicantId)
 
   return (
-    <GradientLayout>
+      <GradientLayout className='!pt-0 !px-0 justify-start'>
+      <GlobalHeader className='w-full' />
       <GlassLayout hideBrand>
         <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
           <CardHeader className="items-center text-center gap-2">
@@ -122,6 +124,6 @@ function RouteComponent() {
           )}
         </Card>
       </GlassLayout>
-    </GradientLayout>
+      </GradientLayout>
   )
 }

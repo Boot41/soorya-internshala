@@ -1,4 +1,5 @@
 import RecruiterDashboard from '@/components/dashboard/recruiter'
+import GlobalHeader from '@/components/global-header'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/dashboard')({
@@ -6,5 +7,10 @@ export const Route = createFileRoute('/dashboard')({
 })
 
 function RouteComponent() {
-  return <RecruiterDashboard />
+  return (
+    <>
+      <GlobalHeader />
+      <RecruiterDashboard />
+    </>
+  )
 }
