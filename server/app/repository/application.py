@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from uuid import UUID
 
-from app.db.models import Application, JobPosting, Applicant
+from app.db.models import Application, JobPosting, Applicant, User
 from fastapi import HTTPException, status
 
 
@@ -39,3 +39,45 @@ def ensure_applicant_profile(db: Session, *, user_id: UUID) -> Applicant:
     if not applicant:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Applicant profile not found")
     return applicant
+
+
+def list_applications_for_job(db: Session, *, job_id: UUID):
+    """
+    Returns list of applications for a job with applicant name and resume url.
+    """
+    # join applications -> applicants (resume_url) -> users (name)
+    q = (
+        db.query(
+            Application.application_id,
+            Application.applicant_id,
+            Application.status,
+            Applicant.resume_url,
+            User.first_name,
+            User.last_name,
+        )
+        .join(Applicant, Applicant.applicant_id == Application.applicant_id)
+        .join(User, User.user_id == Applicant.applicant_id)
+        .filter(Application.job_id == job_id)
+        .order_by(Application.applied_at.desc())
+    )
+    rows = q.all()
+    return [
+        {
+            "application_id": r.application_id,
+            "applicant_id": r.applicant_id,
+            "status": str(r.status),
+            "resume_url": r.resume_url,
+            "applicant_name": f"{r.first_name} {r.last_name}",
+        }
+        for r in rows
+    ]
+
+
+def update_application_status(db: Session, *, application_id: UUID, status_value: str) -> Application:
+    app = db.query(Application).filter(Application.application_id == application_id).first()
+    if not app:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Application not found")
+    app.status = status_value
+    db.commit()
+    db.refresh(app)
+    return app

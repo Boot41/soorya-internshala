@@ -23,15 +23,21 @@ export function useRestriction(
   const accessToken = useAuthStore((s) => s.accessToken)
 
   const canAccess = useMemo(() => {
+    // Public route that only requires authentication
+    if (!required) return !!accessToken
 
-    if(!required)
-      return !!accessToken
+    // If no token at all, definitely cannot access
+    if (!accessToken) return false
 
-    if (!userType) return false
+    // Token present but userType not yet hydrated -> indeterminate; don't redirect yet
+    if (!userType) return undefined as unknown as boolean
+
+    // Token present and userType known
     return userType === required
   }, [userType, required, accessToken])
 
   useEffect(() => {
+    // Only redirect on definitive denial, avoid redirecting while state is indeterminate
     if (canAccess === false) {
       toast.warning("You are not authorized to access this page")
       navigate({ to: redirectTo })

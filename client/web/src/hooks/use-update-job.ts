@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -24,6 +25,7 @@ export type UpdateJobPayload = z.infer<typeof updateSchema>
 
 export function useUpdateJob(jobId: string) {
   const qc = useQueryClient()
+  const navigate = useNavigate()
 
   const form = useForm<UpdateJobPayload>({
     resolver: zodResolver(updateSchema),
@@ -41,6 +43,7 @@ export function useUpdateJob(jobId: string) {
     onSuccess: async (res) => {
       toast.success(res?.message ?? "Job updated")
       await qc.invalidateQueries({ queryKey: ["job-listing", jobId] })
+      navigate({ to: "/job-listing/$jobId", params: {jobId: jobId} })
     },
     onError: (err: any) => {
       toast.error(err?.message ?? "Failed to update job")
