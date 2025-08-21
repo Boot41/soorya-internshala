@@ -10,6 +10,11 @@ from app.schemas.company import CompanyCreate, CompanyUpdate, CompanyResponse
 router = APIRouter()
 
 
+@router.get("/", response_model=list[CompanyResponse])
+def list_companies(db: Session = Depends(get_db)):
+    return company_repository.list_companies(db)
+
+
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_company(
     company_in: CompanyCreate,

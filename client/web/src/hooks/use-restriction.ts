@@ -21,7 +21,7 @@ export function useRestriction(
   const userType = useUserStore((s) => s.userType)
 
   const canAccess = useMemo(() => {
-    if (!userType) return undefined // unknown yet
+    if (!userType) return false
     return userType === required
   }, [userType, required])
 

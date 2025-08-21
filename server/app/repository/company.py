@@ -10,6 +10,10 @@ def get_company(db: Session, company_id: UUID) -> Company | None:
     return db.query(Company).filter(Company.company_id == company_id).first()
 
 
+def list_companies(db: Session) -> list[Company]:
+    return db.query(Company).order_by(Company.name.asc()).all()
+
+
 def get_recruiter_by_user_id(db: Session, user_id: UUID) -> Recruiter | None:
     return db.query(Recruiter).filter(Recruiter.recruiter_id == user_id).first()
 

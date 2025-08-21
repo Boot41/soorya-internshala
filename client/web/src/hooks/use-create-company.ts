@@ -5,8 +5,10 @@ import { useMutation } from "@tanstack/react-query"
 import { createCompany } from "@/api/company"
 import { getErrorMessage } from "@/utils/error"
 import { toast } from "sonner"
+import { useNavigate } from "@tanstack/react-router"
 
 export function useCreateCompany() {
+  const navigate = useNavigate()
   const form = useForm<CompanyPayload>({
     resolver: zodResolver(companySchema),
     defaultValues: {
@@ -24,6 +26,7 @@ export function useCreateCompany() {
     mutationFn: (payload: CompanyPayload) => createCompany(payload),
     onSuccess: (data) => {
       toast.success(data?.message ?? "Company created")
+      navigate({ to: "/company" })
     },
     onError: (err) => {
       toast.error(getErrorMessage(err))

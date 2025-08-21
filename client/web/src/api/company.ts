@@ -2,11 +2,7 @@
 import api from "@/api/client"
 import { getErrorMessage } from "@/utils/error"
 import type { CompanyPayload } from "@/schema/company"
-
-export interface CreateCompanyResponse {
-  message: string
-  company_id: string
-}
+import type { Company, CreateCompanyResponse } from "@/types/company"
 
 export async function createCompany(payload: CompanyPayload): Promise<CreateCompanyResponse> {
   try {
@@ -18,10 +14,7 @@ export async function createCompany(payload: CompanyPayload): Promise<CreateComp
   }
 }
 
-// Generic company type for fetch/update flows
-export type Company = CompanyPayload & {
-  id: string
-}
+
 
 export async function getCompany(companyId: string): Promise<Company> {
   try {
@@ -29,6 +22,16 @@ export async function getCompany(companyId: string): Promise<Company> {
     return data
   } catch (err) {
     console.error("[getCompany]", err)
+    throw new Error(getErrorMessage(err))
+  }
+}
+
+export async function listCompanies(): Promise<Company[]> {
+  try {
+    const { data } = await api.get<Company[]>(`/companies/`)
+    return data
+  } catch (err) {
+    console.error("[listCompanies]", err)
     throw new Error(getErrorMessage(err))
   }
 }
