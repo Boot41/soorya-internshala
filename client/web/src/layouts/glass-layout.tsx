@@ -9,7 +9,7 @@ export default function GlassLayout({ children, className, hideBrand = false }: 
                 <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
                     <GalleryVerticalEndIcon className="size-4" />
                 </div>
-                Internshala
+                Internhub
             </Link>}
             {children}
         </div>

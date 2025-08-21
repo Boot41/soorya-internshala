@@ -336,3 +336,30 @@ code {
       var(--tracking-normal);
   }
 }
+
+@layer utilities {
+  /* Radial primary-tinted background utility used in Hero */
+  .bg-radial-gradient-primary {
+    background:
+      radial-gradient(closest-side, color-mix(in oklab, var(--color-primary) 8%, transparent), transparent 60%);
+  }
+
+  /* Marquee keyframes */
+  @keyframes marquee-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+}

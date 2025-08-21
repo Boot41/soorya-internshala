@@ -1,39 +1,31 @@
 import { createFileRoute } from '@tanstack/react-router'
-import logo from '../logo.svg'
+import Hero from '@/components/landing/Hero'
+import RecentInternships from '@/components/landing/RecentInternships'
+import Testimonials from '@/components/landing/Testimonials'
+import { LandingGradientLayout } from '@/layouts/gradient-layout'
 
 export const Route = createFileRoute('/')({
-  component: App,
+  component: LandingPage,
 })
 
-function App() {
+function LandingPage() {
+  const handleScrollToCredibility = () => {
+    const el = document.getElementById('credibility')
+    if (!el) return
+    const headerOffset = 64 // 4rem header
+    const y = el.getBoundingClientRect().top + window.scrollY - headerOffset
+    window.scrollTo({ top: y, behavior: 'smooth' })
+  }
+
   return (
-    <div className="text-center">
-      <header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
-        <img
-          src={logo}
-          className="h-[40vmin] pointer-events-none animate-[spin_20s_linear_infinite]"
-          alt="logo"
-        />
-        <p>
-          Edit <code>src/routes/index.tsx</code> and save to reload.
-        </p>
-        <a
-          className="text-[#61dafb] hover:underline"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <a
-          className="text-[#61dafb] hover:underline"
-          href="https://tanstack.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn TanStack
-        </a>
-      </header>
-    </div>
+    <LandingGradientLayout>
+      <main className="bg-transparent">
+        <Hero onScrollToCredibility={handleScrollToCredibility} />
+        <div className='relative justify-between flex flex-col min-h-[calc(100vh-8rem)] items-center overflow-hidden bg-gradient-to-t from-background to-primary/25 px-6 py-16 text-center'>
+          <RecentInternships />
+          <Testimonials />
+        </div>
+      </main>
+    </LandingGradientLayout>
   )
 }

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "t1",
+    "name": "Aarav Sharma",
+    "role": "Frontend Intern @ Acme",
+    "quote": "I found my first internship in under a week. The process was super smooth!"
+  },
+  {
+    "id": "t2",
+    "name": "Isha Verma",
+    "role": "Data Analyst Intern @ Globex",
+    "quote": "The curated listings saved me time and matched my interests perfectly."
+  },
+  {
+    "id": "t3",
+    "name": "Rohan Mehta",
+    "role": "Backend Intern @ Innotech",
+    "quote": "Applying was simple and I got quick responses from recruiters."
+  },
+  {
+    "id": "t4",
+    "name": "Neha Gupta",
+    "role": "Design Intern @ Umbrella",
+    "quote": "Loved the experience! Clear requirements and transparent process."
+  },
+  {
+    "id": "t5",
+    "name": "Karan Singh",
+    "role": "Marketing Intern @ Hooli",
+    "quote": "This platform helped me switch domains with confidence."
+  },
+  {
+    "id": "t6",
+    "name": "Priya Nair",
+    "role": "Product Intern @ Wayne Enterprises",
+    "quote": "Great internship and an even better learning journey."
+  },
+  {
+    "id": "t7",
+    "name": "Ankit Kumar",
+    "role": "ML Intern @ Stark Industries",
+    "quote": "Found cutting-edge roles I couldn't find elsewhere."
+  },
+  {
+    "id": "t8",
+    "name": "Simran Kaur",
+    "role": "HR Intern @ Wonka",
+    "quote": "Seamless application and supportive teams."
+  }
+]
