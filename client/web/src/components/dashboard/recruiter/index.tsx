@@ -18,6 +18,7 @@ export default function RecruiterDashboard() {
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="mx-4 flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+          <h2 className="text-xl font-semibold">Recruiter Dashboard</h2>
           <SectionCards />
           <div className="flex items-center gap-3">
             <span className="text-sm text-muted-foreground">Select Job</span>
@@ -26,7 +27,7 @@ export default function RecruiterDashboard() {
               onValueChange={(v) => setSelectedJobId(v)}
               disabled={jobsQ.isLoading || jobsQ.isError}
             >
-              <SelectTrigger className="w-80">
+              <SelectTrigger className="w-80 !bg-black/20">
                 <SelectValue placeholder={jobsQ.isLoading ? "Loading jobs..." : "Choose a job"} />
               </SelectTrigger>
               <SelectContent>
@@ -41,11 +42,12 @@ export default function RecruiterDashboard() {
             {jobsQ.isError && <Badge variant="destructive">Failed to load jobs</Badge>}
           </div>
 
-          <div className="overflow-hidden rounded-lg border">
+          <div className="overflow-hidden rounded-lg border bg-black/20 backdrop-blur-sm">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Applicant Name</TableHead>
+                  <TableHead>Email</TableHead>
                   <TableHead>Profile URL</TableHead>
                   <TableHead>Resume URL</TableHead>
                   <TableHead>Status</TableHead>
@@ -54,13 +56,13 @@ export default function RecruiterDashboard() {
               <TableBody>
                 {!selectedJobId ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center">
+                    <TableCell colSpan={5} className="text-center">
                       Select a job to view applicants
                     </TableCell>
                   </TableRow>
                 ) : appsQ.isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center">
+                    <TableCell colSpan={5} className="text-center">
                       <div className="flex items-center justify-center gap-2">
                         <IconLoader className="animate-spin" /> Loading applicants...
                       </div>
@@ -68,7 +70,7 @@ export default function RecruiterDashboard() {
                   </TableRow>
                 ) : appsQ.isError ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center">
+                    <TableCell colSpan={5} className="text-center">
                       Failed to load applicants
                     </TableCell>
                   </TableRow>
@@ -76,15 +78,16 @@ export default function RecruiterDashboard() {
                   appsQ.data.map((app) => (
                     <TableRow key={app.application_id}>
                       <TableCell>{app.applicant_name}</TableCell>
+                      <TableCell>{app.applicant_email}</TableCell>
                       <TableCell>
-                        <Link to="/applicant/$applicantId" params={{ applicantId: app.applicant_id }} className="text-primary underline">
-                          /applicant/{app.applicant_id}
+                        <Link to="/applicant/$applicantId" params={{ applicantId: app.applicant_id }} className=" underline">
+                          Profile URL
                         </Link>
                       </TableCell>
                       <TableCell>
                         {app.resume_url ? (
                           <Button variant="link" className="px-0" asChild>
-                            <a href={app.resume_url} target="_blank" rel="noreferrer">Resume</a>
+                            <a href={app.resume_url} target="_blank" rel="noreferrer">Resume URL</a>
                           </Button>
                         ) : (
                           <span className="text-muted-foreground">N/A</span>
@@ -98,13 +101,15 @@ export default function RecruiterDashboard() {
                           }
                           disabled={isUpdatingStatus}
                         >
-                          <SelectTrigger className="w-44">
+                          <SelectTrigger className="w-44 capitalize">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {(["applied", "under review", "shortlisted", "rejected", "hired"] as ApplicationStatus[]).map(
                               (s) => (
-                                <SelectItem key={s} value={s}>
+                                <SelectItem 
+                                className="capitalize"
+                                key={s} value={s}>
                                   {s}
                                 </SelectItem>
                               )
@@ -116,7 +121,7 @@ export default function RecruiterDashboard() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center">
+                    <TableCell colSpan={5} className="text-center">
                       No applicants found
                     </TableCell>
                   </TableRow>
