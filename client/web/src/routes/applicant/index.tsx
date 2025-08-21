@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useRestriction } from '@/hooks/use-restriction'
 import GradientLayout from '@/layouts/gradient-layout'
 import GlassLayout from '@/layouts/glass-layout'
 import { useApplicant } from '@/hooks/use-applicant'
@@ -13,6 +14,7 @@ export const Route = createFileRoute('/applicant/')({
 })
 
 function RouteComponent() {
+  useRestriction('applicant')
   const { data, isLoading, isError, error } = useApplicant()
 
   return (

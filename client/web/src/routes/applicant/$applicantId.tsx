@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useRestriction } from '@/hooks/use-restriction'
 import GradientLayout from '@/layouts/gradient-layout'
 import GlassLayout from '@/layouts/glass-layout'
 import { useApplicantById } from '@/hooks/use-applicant-by-id'
@@ -13,6 +14,7 @@ export const Route = createFileRoute('/applicant/$applicantId')({
 })
 
 function RouteComponent() {
+  useRestriction('recruiter')
   const { applicantId } = Route.useParams()
   const { data, isLoading, isError, error } = useApplicantById(applicantId)
 
