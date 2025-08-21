@@ -1,0 +1,85 @@
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { jobListingSchema, type JobListingPayload } from "@/schema/job-listing"
+import { useMutation } from "@tanstack/react-query"
+import { createJobListing } from "@/api/job-listing"
+import { getErrorMessage } from "@/utils/error"
+import { toast } from "sonner"
+import { useState } from "react"
+import type { JobListingRequestPayload } from "@/types/job-listing"
+
+export function useCreateJob() {
+  const form = useForm<JobListingPayload>({
+    resolver: zodResolver(jobListingSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      requirements: "",
+      skills_required: [],
+      location: "",
+      experience_level: "",
+      job_type: "full-time",
+      salary_range: "",
+      expires_at: undefined,
+      status: "open",
+    },
+    mode: "onSubmit",
+  })
+
+  const { mutateAsync } = useMutation({
+    mutationFn: (payload: JobListingRequestPayload) => createJobListing(payload),
+    onSuccess: (data) => {
+      toast.success(data?.message ?? "Job listing created")
+    },
+    onError: (err) => {
+      toast.error(getErrorMessage(err))
+    },
+  })
+
+  const handleSubmit = form.handleSubmit(async (values: JobListingPayload) => {
+    const payload = {
+      ...values,
+      skills_required: values.skills_required?.join(", ") ?? undefined,
+    }
+    await mutateAsync(payload)
+  })
+
+  const {
+    register,
+    formState: { errors, isSubmitting },
+    setValue,
+    getValues,
+    watch,
+  } = form
+
+  // Raw text state to allow typing commas without aggressive normalization
+  const [skillsInput, setSkillsInput] = useState<string>((getValues("skills_required") ?? []).join(", "))
+
+  // Parse skills from a comma-separated string into array, but keep raw text intact
+  const setSkills = (raw: string) => {
+    setSkillsInput(raw)
+    const skills = raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0)
+    setValue("skills_required", skills, { shouldDirty: true, shouldValidate: true })
+  }
+
+
+  const setExpiresAt = (date: JobListingPayload["expires_at"]) => {
+    setValue("expires_at", date, { shouldDirty: true, shouldValidate: true })
+  }
+
+  const setStatus = (status: JobListingPayload["status"]) => {
+    setValue("status", status, { shouldDirty: true, shouldValidate: true })
+  }
+
+  const setJobType = (jobType: JobListingPayload["job_type"]) => {
+    setValue("job_type", jobType, { shouldDirty: true, shouldValidate: true })
+  }
+
+  const expiresAt = watch("expires_at")
+
+  return { handleSubmit, register, isSubmitting, errors, setExpiresAt, setStatus, setJobType, setSkills, skillsInput, expiresAt }
+}
+

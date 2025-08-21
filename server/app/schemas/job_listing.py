@@ -23,7 +23,7 @@ class JobListingBase(BaseModel):
 
 
 class JobListingCreate(JobListingBase):
-    company_id: UUIDType
+    company_id: Optional[UUIDType] = None
 
 
 class JobListingUpdate(BaseModel):

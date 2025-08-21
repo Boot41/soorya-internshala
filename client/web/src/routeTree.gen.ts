@@ -13,9 +13,11 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ApplicantRouteImport } from './routes/applicant'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompanyIndexRouteImport } from './routes/company/index'
+import { Route as JobListingCreateRouteImport } from './routes/job-listing/create'
 import { Route as CompanyCompanyIdRouteImport } from './routes/company/$companyId'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as JobListingJobIdUpdateRouteImport } from './routes/job-listing/$jobId/update'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -37,6 +39,11 @@ const CompanyIndexRoute = CompanyIndexRouteImport.update({
   path: '/company/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobListingCreateRoute = JobListingCreateRouteImport.update({
+  id: '/job-listing/create',
+  path: '/job-listing/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompanyCompanyIdRoute = CompanyCompanyIdRouteImport.update({
   id: '/company/$companyId',
   path: '/company/$companyId',
@@ -52,6 +59,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobListingJobIdUpdateRoute = JobListingJobIdUpdateRouteImport.update({
+  id: '/job-listing/$jobId/update',
+  path: '/job-listing/$jobId/update',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,7 +72,9 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/company/$companyId': typeof CompanyCompanyIdRoute
+  '/job-listing/create': typeof JobListingCreateRoute
   '/company': typeof CompanyIndexRoute
+  '/job-listing/$jobId/update': typeof JobListingJobIdUpdateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,7 +83,9 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/company/$companyId': typeof CompanyCompanyIdRoute
+  '/job-listing/create': typeof JobListingCreateRoute
   '/company': typeof CompanyIndexRoute
+  '/job-listing/$jobId/update': typeof JobListingJobIdUpdateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,7 +95,9 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/company/$companyId': typeof CompanyCompanyIdRoute
+  '/job-listing/create': typeof JobListingCreateRoute
   '/company/': typeof CompanyIndexRoute
+  '/job-listing/$jobId/update': typeof JobListingJobIdUpdateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,7 +108,9 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/sign-up'
     | '/company/$companyId'
+    | '/job-listing/create'
     | '/company'
+    | '/job-listing/$jobId/update'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -99,7 +119,9 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/sign-up'
     | '/company/$companyId'
+    | '/job-listing/create'
     | '/company'
+    | '/job-listing/$jobId/update'
   id:
     | '__root__'
     | '/'
@@ -108,7 +130,9 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/sign-up'
     | '/company/$companyId'
+    | '/job-listing/create'
     | '/company/'
+    | '/job-listing/$jobId/update'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,7 +142,9 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
   CompanyCompanyIdRoute: typeof CompanyCompanyIdRoute
+  JobListingCreateRoute: typeof JobListingCreateRoute
   CompanyIndexRoute: typeof CompanyIndexRoute
+  JobListingJobIdUpdateRoute: typeof JobListingJobIdUpdateRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -151,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompanyIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/job-listing/create': {
+      id: '/job-listing/create'
+      path: '/job-listing/create'
+      fullPath: '/job-listing/create'
+      preLoaderRoute: typeof JobListingCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/company/$companyId': {
       id: '/company/$companyId'
       path: '/company/$companyId'
@@ -172,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/job-listing/$jobId/update': {
+      id: '/job-listing/$jobId/update'
+      path: '/job-listing/$jobId/update'
+      fullPath: '/job-listing/$jobId/update'
+      preLoaderRoute: typeof JobListingJobIdUpdateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -182,7 +222,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthSignUpRoute: AuthSignUpRoute,
   CompanyCompanyIdRoute: CompanyCompanyIdRoute,
+  JobListingCreateRoute: JobListingCreateRoute,
   CompanyIndexRoute: CompanyIndexRoute,
+  JobListingJobIdUpdateRoute: JobListingJobIdUpdateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
