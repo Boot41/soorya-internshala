@@ -1,10 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
+import GlobalHeader from '@/components/global-header'
 import GradientLayout from '@/layouts/gradient-layout'
 import GlassLayout from '@/layouts/glass-layout'
 import { useJob } from '@/hooks/use-job'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/card'
 import { Badge } from '@/ui/badge'
 import { Field } from '@/ui/field'
+import { Button } from '@/ui/button'
+import { useUserStore } from '@/store/user'
 
 export const Route = createFileRoute('/job-listing/$jobId/')({
   component: RouteComponent,
@@ -12,11 +15,14 @@ export const Route = createFileRoute('/job-listing/$jobId/')({
 
 function RouteComponent() {
   const { jobId } = Route.useParams()
-  const { data, isLoading, isError, error } = useJob(jobId)
+  const { data, isLoading, isError, error, apply, isApplying, hasApplied, applicationStatus } = useJob(jobId)
+  const userType = useUserStore((s) => s.userType)
+  const canApply = !isLoading && !isError && data?.status === 'open' && userType === 'applicant'
 
   return (
-    <GradientLayout>
-      <GlassLayout hideBrand>
+    <GradientLayout className='!pt-0 !px-0 justify-start'>
+      <GlobalHeader className='w-full' />
+      <GlassLayout className='flex-1 justify-center' hideBrand>
         <Card className="backdrop-blur-md bg-black/15 border-white/10 shadow-xl">
           <CardHeader className="items-center text-center gap-2">
             <CardTitle className="text-xl flex flex-col items-center gap-2">
@@ -40,6 +46,20 @@ function RouteComponent() {
               </CardDescription>
             )}
           </CardHeader>
+          {/* Header action: show status if already applied, else show Apply button */}
+          {!isLoading && !isError && userType === 'applicant' && (
+            <div className='mx-auto'>
+              {hasApplied ? (
+                <Badge className='capitalize' variant="secondary">Application Status: {applicationStatus ?? 'applied'}</Badge>
+              ) : (
+                canApply && (
+                  <Button className='cursor-pointer px-12' onClick={() => apply(undefined)} disabled={isApplying}>
+                    {isApplying ? 'Applying…' : 'Apply'}
+                  </Button>
+                )
+              )}
+            </div>
+          )}
           {!isLoading && !isError && data && (
             <CardContent>
               <div className="grid gap-6">
@@ -78,6 +98,8 @@ function RouteComponent() {
                   )}
                 </div>
               </div>
+
+
             </CardContent>
           )}
         </Card>

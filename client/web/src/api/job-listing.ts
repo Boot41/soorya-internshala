@@ -7,6 +7,41 @@ export interface CreateJobListingResponse {
   job_id: string
 }
 
+export interface ApplicationStatusResponse {
+  has_applied: boolean
+  application_id?: string | null
+  status?: string | null
+}
+
+export async function getMyApplicationStatus(jobId: string): Promise<ApplicationStatusResponse> {
+  try {
+    const { data } = await api.get<ApplicationStatusResponse>(`/job-listings/${jobId}/application/me`)
+    return data
+  } catch (err) {
+    console.error("[getMyApplicationStatus]", err)
+    throw new Error(getErrorMessage(err))
+  }
+}
+
+export interface ApplyToJobPayload {
+  cover_letter?: string
+}
+
+export interface ApplyToJobResponse {
+  message: string
+  application_id: string
+}
+
+export async function applyToJob(jobId: string, payload?: ApplyToJobPayload): Promise<ApplyToJobResponse> {
+  try {
+    const { data } = await api.post<ApplyToJobResponse>(`/job-listings/${jobId}/apply`, payload ?? {})
+    return data
+  } catch (err) {
+    console.error("[applyToJob]", err)
+    throw new Error(getErrorMessage(err))
+  }
+}
+
 export async function createJobListing(payload: JobListingRequestPayload): Promise<CreateJobListingResponse> {
   try {
     const { data } = await api.post<CreateJobListingResponse>("/job-listings/", payload)

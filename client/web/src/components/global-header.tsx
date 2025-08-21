@@ -1,10 +1,11 @@
 import { Link } from '@tanstack/react-router'
 import { GalleryVerticalEndIcon } from 'lucide-react'
+import { cn } from '@/utils/cn'
 
 // Simple global header with fixed height and placeholder links/logo
-export default function GlobalHeader() {
+export default function GlobalHeader({className}: {className?: string}) {
     return (
-        <header className="sticky top-0 z-40 h-16 border-b border-border bg-card/70 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+        <header className={cn("sticky top-0 z-40 h-16 border-b border-border bg-card/70 backdrop-blur supports-[backdrop-filter]:bg-card/60", className)}>
             <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                 <Link to="/" className="flex items-center gap-3">
                     <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
