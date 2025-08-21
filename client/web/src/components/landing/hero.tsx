@@ -1,4 +1,4 @@
-import Marquee from '@/components/landing/Marquee'
+import Marquee from '@/ui/marquee'
 
 interface HeroProps {
   onScrollToCredibility?: () => void

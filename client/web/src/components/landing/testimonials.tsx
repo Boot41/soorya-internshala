@@ -1,4 +1,4 @@
-import Marquee from './Marquee'
+import Marquee from '../../ui/marquee'
 import testimonies from '@/mocks/testimonies.json'
 
 interface TestimonyItem {

@@ -1,4 +1,4 @@
-import Marquee from './Marquee'
+import Marquee from '../../ui/marquee'
 
 export interface CompanyItem {
   id: string
