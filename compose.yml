@@ -1,4 +1,22 @@
 services:
+
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: application
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      FRONTEND_URLS: ${FRONTEND_URLS}
+      BACKEND_URL: ${BACKEND_URL}
+      SECRET_KEY: ${SECRET_KEY}
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
   postgres:
     image: postgres:15
     container_name: postgres
