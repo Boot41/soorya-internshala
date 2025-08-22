@@ -18,7 +18,7 @@ export async function createCompany(payload: CompanyPayload): Promise<CreateComp
 
 export async function getCompany(companyId: string): Promise<Company> {
   try {
-    const { data } = await api.get<Company>(`/companies/${companyId}/`)
+    const { data } = await api.get<Company>(`/companies/${companyId}`)
     return data
   } catch (err) {
     console.error("[getCompany]", err)

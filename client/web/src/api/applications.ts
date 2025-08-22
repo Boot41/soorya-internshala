@@ -17,7 +17,7 @@ export async function listApplicationsByJob(jobId: string): Promise<JobApplicati
   try {
     // NOTE: Server endpoint not present yet; expected endpoint proposal
     // e.g., GET /jobs/{job_id}/applications or /applications?job_id=
-    const { data } = await api.get<JobApplicationItem[]>(`/applications`, { params: { job_id: jobId } })
+    const { data } = await api.get<JobApplicationItem[]>(`/applications/`, { params: { job_id: jobId } })
     return data
   } catch (err) {
     console.error("[listApplicationsByJob]", err)

@@ -48,8 +48,7 @@ export function ApplicantForm({ className, ...props }: React.ComponentProps<"div
           <div className="flex items-center justify-center pb-4">
             <div className="relative">
               <Avatar className="h-20 w-20 border border-white/20">
-                <AvatarImage className="object-cover" alt="Profile photo" src={avatarUrl} />
-                <AvatarFallback className="text-lg">{profile?.first_name?.[0] ?? 'A'}</AvatarFallback>
+                {avatarUrl ? <AvatarImage className="object-cover" alt="Profile photo" src={avatarUrl} /> : <AvatarFallback className="text-lg">{profile?.first_name?.[0] ?? 'A'}</AvatarFallback>}
               </Avatar>
               {/* Hidden file input */}
               <input

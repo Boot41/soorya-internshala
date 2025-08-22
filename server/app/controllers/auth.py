@@ -61,7 +61,7 @@ def login_controller(response: Response, *, db: Session, user_login: UserLogin):
         max_age=settings.REFRESH_TOKEN_EXPIRE_MINUTES * 60,
         expires=settings.REFRESH_TOKEN_EXPIRE_MINUTES * 60,
         path="/api/v1/auth/refresh",
-        samesite="lax",
+        samesite="none",
         secure=True,
     )
 
