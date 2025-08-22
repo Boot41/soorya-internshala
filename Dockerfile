@@ -18,17 +18,20 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm AS server
 
 WORKDIR /app
 
-COPY server/pyproject.toml server/uv.lock ./
-
-RUN uv sync --frozen
-
-COPY server .
-
-COPY --from=client-builder /app/dist ./app/static/
-
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONPATH=/app
 
+COPY server/pyproject.toml server/uv.lock ./
+
+RUN uv sync
+
+COPY server .
+COPY --from=client-builder /app/dist ./app/static/
+
+COPY entrypoints.sh /app/entrypoint.sh
+
+RUN chmod +x /app/entrypoint.sh
+
 EXPOSE 8000
 
-ENTRYPOINT ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["/app/entrypoint.sh"]
