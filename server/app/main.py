@@ -29,21 +29,18 @@ app.add_middleware(
 # Ensure static directories exist and mount them for serving
 ensure_static_dirs()
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
-# app.mount("/assets", StaticFiles(directory=str(STATIC_DIR / "assets")), name="assets")
+app.mount("/assets", StaticFiles(directory=str(STATIC_DIR / "assets")), name="assets")
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 # Serve SPA index.html for root and any non-API path
-# @app.get("/", include_in_schema=False)
-# def serve_index():
-#     return FileResponse(str(STATIC_DIR / "index.html"))
+@app.get("/{full_path:path}", include_in_schema=False)
+def spa_catch_all(full_path: str):
+    if full_path.startswith("api") or full_path.startswith("assets"):
+        raise HTTPException(status_code=404)
+    return FileResponse(str(STATIC_DIR / "index.html"))
 
 
-# @app.get("/{full_path:path}", include_in_schema=False)
-# def spa_catch_all(full_path: str):
-#     return FileResponse(str(STATIC_DIR / "index.html"))
-
-# ---------- Global Error Handlers ----------
 logger = logging.getLogger("app")
 
 

@@ -34,7 +34,10 @@ def register_user_controller(db: Session, *, user: UserCreate):
         logger.warning("register_user_conflict: email=%s", user.email)
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     new_user = user_repository.create_user(db=db, user=user)
-    logger.info("user_registered: user_id=%s email=%s", getattr(new_user, "user_id", None), new_user.email)
+    # Be robust to test doubles that may not have all attributes
+    new_user_id = getattr(new_user, "user_id", getattr(new_user, "id", None))
+    new_user_email = getattr(new_user, "email", user.email)
+    logger.info("user_registered: user_id=%s email=%s", new_user_id, new_user_email)
     return new_user
 
 
