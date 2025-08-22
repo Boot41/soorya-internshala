@@ -4,6 +4,7 @@ import { logout } from "@/api/auth"
 import { authStore } from "@/store/auth"
 import { userStore } from "@/store/user"
 import { toast } from "sonner"
+import { getErrorMessage } from "@/utils/error"
 
 export function useLogout() {
   const navigate = useNavigate()
@@ -11,14 +12,13 @@ export function useLogout() {
   const { mutateAsync: doLogout, isPending } = useMutation({
     mutationFn: () => logout(),
     onSuccess: async (data) => {
-      // Clear client-side auth and user state
+      await navigate({ to: "/" })
       authStore.clear()
       userStore.clear()
       toast.success(data?.message ?? "Logged out")
-      await navigate({ to: "/" })
     },
     onError: (err: any) => {
-      toast.error(err?.message ?? "Failed to logout")
+      toast.error(getErrorMessage(err))
     },
   })
 

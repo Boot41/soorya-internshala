@@ -36,7 +36,7 @@ export function useLogin() {
         if (me?.user_type === "recruiter") {
           await navigate({ to: "/company" })
         } else {
-          await navigate({ to: "/" })
+          await navigate({ to: "/applicant/edit" })
         }
       } catch (e) {
         // fallback if /users/me fails

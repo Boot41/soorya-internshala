@@ -90,17 +90,19 @@ export default function RecruiterDashboard() {
                   appsQ.data.map((app) => (
                     <TableRow key={app.application_id}>
                       <TableCell>{app.applicant_name}</TableCell>
-                      <TableCell>{app.applicant_email}</TableCell>
+                      <TableCell className="underline">
+                        <a href={`mailto:${app.applicant_email}`}>
+                          {app.applicant_email}
+                        </a>
+                      </TableCell>
                       <TableCell>
                         <Link to="/applicant/$applicantId" params={{ applicantId: app.applicant_id }} className=" underline">
                           Profile URL
                         </Link>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="underline">
                         {app.resume_url ? (
-                          <Button variant="link" className="px-0" asChild>
-                            <a href={app.resume_url} target="_blank" rel="noreferrer">Resume URL</a>
-                          </Button>
+                          <a href={app.resume_url} target="_blank" rel="noreferrer">Resume URL</a>
                         ) : (
                           <span className="text-muted-foreground">N/A</span>
                         )}
