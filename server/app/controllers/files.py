@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from uuid import uuid4
 from typing import Optional
@@ -14,6 +15,8 @@ from app.constants.paths import (
 )
 from app.db import models
 from app.repository.company import get_recruiter_by_user_id
+
+logger = logging.getLogger("app.controllers.files")
 
 ALLOWED_EXTENSIONS = {
     "resume": {".pdf"},
@@ -35,9 +38,17 @@ async def save_uploaded_file(
     Returns a public URL path (e.g., /static/resumes/<filename>).
     file_type: one of "resume" | "profile" | "logo"
     """
+    logger.debug(
+        "file_upload_request: user_id=%s type=%s filename=%s content_type=%s",
+        getattr(current_user, "user_id", None),
+        file_type,
+        getattr(file, "filename", None),
+        getattr(file, "content_type", None),
+    )
     ensure_static_dirs()
 
     if file_type not in ALLOWED_EXTENSIONS:
+        logger.warning("file_upload_invalid_type: type=%s", file_type)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid file type",
@@ -51,6 +62,11 @@ async def save_uploaded_file(
     if file_type == "resume":
         # Must be PDF by extension OR content-type
         if suffix not in ALLOWED_EXTENSIONS["resume"] and content_type != "application/pdf":
+            logger.warning(
+                "file_upload_invalid_resume: suffix=%s content_type=%s",
+                suffix,
+                content_type,
+            )
             raise HTTPException(
                 status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
                 detail="Resume must be a PDF",
@@ -65,6 +81,11 @@ async def save_uploaded_file(
             suffix in valid_exts
             or (content_type.startswith("image/") and suffix in {".png", ".jpg", ".jpeg"})
         ):
+            logger.warning(
+                "file_upload_invalid_image: suffix=%s content_type=%s",
+                suffix,
+                content_type,
+            )
             raise HTTPException(
                 status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
                 detail="Image must be PNG or JPG",
@@ -90,6 +111,13 @@ async def save_uploaded_file(
 
     # Return public URL (served by StaticFiles at /static)
     url = f"{settings.BACKEND_URL}{url_prefix}/{filename}"
+    logger.info(
+        "file_saved: user_id=%s type=%s path=%s bytes=%d",
+        getattr(current_user, "user_id", None),
+        file_type,
+        str(destination),
+        len(data) if isinstance(data, (bytes, bytearray)) else -1,
+    )
 
     # Persist URL in the database based on file type
     if file_type in ("resume", "profile"):
@@ -100,6 +128,7 @@ async def save_uploaded_file(
             .first()
         )
         if not applicant:
+            logger.debug("applicant_auto_create: user_id=%s", getattr(current_user, "user_id", None))
             applicant = models.Applicant(applicant_id=current_user.user_id)
             db.add(applicant)
 
@@ -109,12 +138,22 @@ async def save_uploaded_file(
             applicant.profile_picture_url = url
 
         db.commit()
+        logger.info(
+            "applicant_updated_%s_url: user_id=%s url=%s",
+            file_type,
+            getattr(current_user, "user_id", None),
+            url,
+        )
     elif file_type == "logo":
         # Determine company to update
         target_company_id = company_id
         if target_company_id is None:
             recruiter = get_recruiter_by_user_id(db, current_user.user_id)
             if not recruiter:
+                logger.warning(
+                    "logo_upload_forbidden: user_id=%s",
+                    getattr(current_user, "user_id", None),
+                )
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail="Recruiter/company not found for current user",
@@ -127,8 +166,10 @@ async def save_uploaded_file(
             .first()
         )
         if not company:
+            logger.warning("logo_upload_company_not_found: company_id=%s", target_company_id)
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
         company.logo_url = url
         db.commit()
+        logger.info("company_logo_updated: company_id=%s url=%s", target_company_id, url)
 
     return url
