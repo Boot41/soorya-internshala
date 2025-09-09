@@ -10,9 +10,6 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: server
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -20,7 +17,8 @@ jobs:
       - name: Setup Python
         uses:  actions/setup-python@v5
         with: 
-          python-version-file: ".python-version"
+          python-version-file: "server/.python-version"
+        
 
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
