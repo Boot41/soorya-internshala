@@ -33,8 +33,10 @@ jobs:
       - name: Install Dependencies
         run: |
           uv sync --locked --dev
+        working-directory: server
 
       - name: Run Tests with Coverage
         run: |
           uv run pytest -q --cov
+        working-directory: server
       
