@@ -19,12 +19,12 @@ jobs:
       - name: Setup Python
         uses:  actions/setup-python@v5
         with: 
-          python-version: "3.12"
+          python-version-file: ".python-version"
 
       - name: Setup uv
-        uses: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.8.15"
       
       - name: Verify Installs
         run: |
@@ -33,7 +33,7 @@ jobs:
       
       - name: Install Dependencies
         run: |
-          uv sync
+          uv sync --locked --dev
 
       - name: Run Tests with Coverage
         run: |
