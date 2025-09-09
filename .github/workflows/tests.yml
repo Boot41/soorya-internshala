@@ -1,0 +1,41 @@
+name: FastAPI Unit Tests
+on: 
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_run:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses:  actions/setup-python@v5
+        with: 
+          python-version: "3.12"
+
+      - name: Setup uv
+        uses: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      
+      - name: Verify Installs
+        run: |
+          python --version
+          uv --version
+      
+      - name: Install Dependencies
+        run: |
+          uv sync
+
+      - name: Run Tests with Coverage
+        run: |
+          uv run pytest -q --cov
+      
